@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{76450760-BE18-4B65-A7A4-D873F9AE7D4E}</ProjectGuid>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <UseMSBuildEngine>true</UseMSBuildEngine>
+    <OutputType>Library</OutputType>
+    <RootNamespace>PlayGround.UI</RootNamespace>
+    <AssemblyName>PlayGround.UI</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="..\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PlayGround.Models\PlayGround.Models.csproj">
+      <Project>{B7A471A8-67AA-4B24-9CC6-360569B68AB8}</Project>
+      <Name>PlayGround.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PlayGround.Repositories\PlayGround.Repositories.csproj">
+      <Project>{F785098C-DB68-4E88-ACA7-BF6E71527F9E}</Project>
+      <Name>PlayGround.Repositories</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PlayGround.Services\PlayGround.Services.csproj">
+      <Project>{6D64F6AA-ED9E-4E42-A1DF-17160C012932}</Project>
+      <Name>PlayGround.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PlayGround.Contracts\PlayGround.Contracts.csproj">
+      <Project>{F40E56BB-89E1-4B72-A178-490A3EF3FFB4}</Project>
+      <Name>PlayGround.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PlayGround.ViewModels\PlayGround.ViewModels.csproj">
+      <Project>{506D37FC-2732-4597-8316-196BA0BA6D5E}</Project>
+      <Name>PlayGround.ViewModels</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+</Project>
