@@ -7,14 +7,23 @@
 using Foundation;
 using System;
 using System.CodeDom.Compiler;
+using UIKit;
 
 namespace PlayGround.UI.iOS
 {
-    [Register ("ViewController")]
-    partial class ViewController
+    [Register ("MainViewController")]
+    partial class MainViewController
     {
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel HelloWorldLabel { get; set; }
+
         void ReleaseDesignerOutlets ()
         {
+            if (HelloWorldLabel != null) {
+                HelloWorldLabel.Dispose ();
+                HelloWorldLabel = null;
+            }
         }
     }
 }
