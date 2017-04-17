@@ -33,6 +33,7 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="HelloWorldModel.cs" />
+    <Compile Include="Recipe.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PlayGround.Utility\PlayGround.Utility.csproj">
