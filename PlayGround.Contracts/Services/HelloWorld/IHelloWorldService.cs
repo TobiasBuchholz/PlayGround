@@ -1,8 +1,10 @@
 using System;
+using PlayGround.Models;
+
 namespace PlayGround.Contracts.Services.HelloWorld
 {
 	public interface IHelloWorldService
 	{
-		IObservable<string> GetHelloWorld();
+		IObservable<HelloWorldModel> GetHelloWorld();
 	}
 }

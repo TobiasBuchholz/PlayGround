@@ -18,6 +18,7 @@ namespace PlayGround.UnitTests
 			scheduler.Schedule(TimeSpan.FromTicks(1),
 			                   () => sut
 			                   .GetHelloWorld()
+			                   .Select(x => x.Name)
 			                   .Subscribe(text => helloWorld = text));
 
 			scheduler.AdvanceUntilEmpty();
