@@ -119,6 +119,9 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\netstandard1.3\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="HelperTrinity">
+      <HintPath>..\packages\HelperTrinity.4.0.0\lib\netstandard1.0\HelperTrinity.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
@@ -129,6 +132,7 @@
     <Folder Include="Resources\Base.lproj\" />
     <Folder Include="Views\" />
     <Folder Include="Properties\" />
+    <Folder Include="Utility\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\Base.lproj\Main.storyboard" />
@@ -151,8 +155,17 @@
     <Compile Include="Views\MainViewController.designer.cs">
       <DependentUpon>MainViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\ViewControllerBase.cs" />
     <Compile Include="iOSCompositionRoot.cs" />
+    <Compile Include="Utility\AutoSizeTableViewSource.cs" />
+    <Compile Include="Utility\Layout.cs" />
+    <Compile Include="Utility\LayoutExtensions.cs" />
+    <Compile Include="Utility\TableViewCellBase.cs" />
+    <Compile Include="Utility\TableViewControllerBase.cs" />
+    <Compile Include="Utility\ViewControllerBase.cs" />
+    <Compile Include="Views\CoversViewController.cs" />
+    <Compile Include="ControlFactory.cs" />
+    <Compile Include="PreferredFont.cs" />
+    <Compile Include="Resources.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\Base.lproj\Localizable.strings" />

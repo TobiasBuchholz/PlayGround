@@ -33,6 +33,7 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="MainViewModel.cs" />
+    <Compile Include="CoversViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PlayGround.Contracts\PlayGround.Contracts.csproj">

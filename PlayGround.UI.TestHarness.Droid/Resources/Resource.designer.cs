@@ -28,7 +28,6 @@ namespace PlayGround.UI.TestHarness.Droid
 		{
 			global::Xamarin.Forms.Platform.Android.Resource.Attribute.actionBarSize = global::PlayGround.UI.TestHarness.Droid.Resource.Attribute.actionBarSize;
 			global::Splat.Resource.String.library_name = global::PlayGround.UI.TestHarness.Droid.Resource.String.library_name;
-			global::PlayGround.Services.Droid.Resource.String.library_name = global::PlayGround.UI.TestHarness.Droid.Resource.String.library_name;
 		}
 		
 		public partial class Animation

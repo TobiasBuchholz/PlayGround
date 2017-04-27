@@ -34,6 +34,8 @@
     </Compile>
     <Compile Include="ViewModels\IMainViewModel.cs" />
     <Compile Include="Services\HelloWorld\IHelloWorldService.cs" />
+    <Compile Include="ViewModels\ICoversViewModel.cs" />
+    <Compile Include="Services\SystemNotification\ISystemNotificationsService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PlayGround.Models\PlayGround.Models.csproj">
@@ -45,6 +47,7 @@
     <Folder Include="ViewModels\" />
     <Folder Include="Services\" />
     <Folder Include="Services\HelloWorld\" />
+    <Folder Include="Services\SystemNotification\" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Reactive.Interfaces">
