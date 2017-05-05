@@ -12,10 +12,17 @@ namespace PlayGround.UI.iOS
 		private readonly CompositeDisposable disposables;
 		private TViewModel viewModel;
 
+		protected ViewControllerBase() 
+		{
+			disposables = new CompositeDisposable();
+			ViewModel = Locator.Current.GetService<TViewModel>();
+		}
+
 		protected ViewControllerBase(IntPtr handle) 
 			: base(handle)
 		{
 			disposables = new CompositeDisposable();
+			ViewModel = Locator.Current.GetService<TViewModel>();
 		}
 
 		public TViewModel ViewModel
@@ -33,12 +40,6 @@ namespace PlayGround.UI.iOS
 		protected CompositeDisposable Disposables
 		{
 			get { return disposables; }
-		}
-
-		public override void ViewDidLoad()
-		{
-			base.ViewDidLoad();
-			ViewModel = Locator.Current.GetService<TViewModel>();
 		}
 
 		protected override void Dispose(bool disposing)

@@ -1,17 +1,19 @@
-﻿using System.Reactive;
+﻿using System;
+using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using Genesis.Logging;
 using PlayGround.Contracts.Services.HelloWorld;
 using PlayGround.Contracts.ViewModels;
 using PlayGround.Models;
 using ReactiveUI;
-using Splat;
 
 namespace PlayGround.ViewModels
 {
-	public class MainViewModel : ReactiveObject, IMainViewModel
+	public class MainViewModel : ReactiveObject, IMainViewModel, ISupportsActivation
 	{
-		private readonly CompositeDisposable disposables;
+		private readonly ILogger logger;
+		private readonly ViewModelActivator activator;
 		private readonly IHelloWorldService helloWorldService;
 
 		private ObservableAsPropertyHelper<string> helloWorldText;
@@ -19,40 +21,41 @@ namespace PlayGround.ViewModels
 
 		public MainViewModel(IHelloWorldService helloWorldService)
 		{
-			this.disposables = new CompositeDisposable();
-			this.helloWorldService = helloWorldService ?? Locator.Current.GetService<IHelloWorldService>();
+			this.logger = LoggerService.GetLogger(this.GetType());
+			this.activator = new ViewModelActivator();
+			this.helloWorldService = helloWorldService;
 
 			InitCommands();
 			InitProperties();
-			ExecuteCommands();
+
+			this.WhenActivated(disposables => {
+				using (this.logger.Perf("Activation")) 
+				{
+					loadHelloWorld
+						.Execute()
+						.SubscribeSafe()
+						.DisposeWith(disposables);	
+				}
+			});
 		}
 
 		private void InitCommands()
 		{
-			loadHelloWorld = ReactiveCommand.CreateFromObservable(() => helloWorldService.GetHelloWorld());
-			loadHelloWorld.LogThrownExceptions(disposables);
+			loadHelloWorld = ReactiveCommand
+				.CreateFromObservable(() => helloWorldService.GetHelloWorld())
+				.LogThrownExceptions();
 		}
 
 		private void InitProperties()
 		{
 			this.WhenAnyObservable(x => x.loadHelloWorld)
 			    .Select(x => x.Name)
-			    .ToProperty(this, x => x.HelloWorldText, out helloWorldText)
-			    .DisposeWith(disposables);
-		}
-
-		private void ExecuteCommands()
-		{
-			loadHelloWorld.ExecuteNow(disposables);
+			    .ToProperty(this, x => x.HelloWorldText, out helloWorldText);
 		}
 
 		#region properties
+		public ViewModelActivator Activator => activator;
 		public string HelloWorldText => helloWorldText.Value;
  		#endregion
-
-		public void Dispose()
-		{
-			disposables.Dispose();
-		}
 	}
 }

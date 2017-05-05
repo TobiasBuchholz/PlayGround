@@ -55,6 +55,11 @@ namespace PlayGround.UI
 			return LoggedCreation(() => new MainViewModel(helloWorldService.Value));
 		}
 
+		public ICoversViewModel ResolveCoversViewModel()
+		{
+			return LoggedCreation(() => new CoversViewModel());
+		}
+
 		public IHelloWorldService ResolveHelloWorldService()
 		{
 			return helloWorldService.Value;

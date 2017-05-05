@@ -15,7 +15,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\iPhoneSimulator\Debug</OutputPath>
-    <DefineConstants>DEBUG;ENABLE_TEST_CLOUD;</DefineConstants>
+    <DefineConstants>__UNIFIED__;__MOBILE__;__IOS__;ENABLE_TEST_CLOUD;TRACE;DEBUG;ENSURE;LOGGING</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodesignKey>iPhone Developer</CodesignKey>
@@ -119,6 +119,12 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\netstandard1.3\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Genesis.Logging">
+      <HintPath>..\packages\Genesis.Logging.1.0.7-alpha\lib\portable-net45+win8+wp8+wpa81\Genesis.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Genesis.Ensure">
+      <HintPath>..\packages\Genesis.Ensure.1.0.5\lib\netstandard1.0\Genesis.Ensure.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
@@ -153,6 +159,7 @@
     </Compile>
     <Compile Include="Views\ViewControllerBase.cs" />
     <Compile Include="iOSCompositionRoot.cs" />
+    <Compile Include="Views\CoversViewController.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\Base.lproj\Localizable.strings" />

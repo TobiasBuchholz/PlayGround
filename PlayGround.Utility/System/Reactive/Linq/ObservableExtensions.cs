@@ -65,6 +65,14 @@ namespace System.Reactive.Linq
 			return source.Execute(param).SubscribeSafe().DisposeWith(disposable);
 		}
 
+		public static ReactiveCommandBase<TParam, TResult> LogThrownExceptions<TParam, TResult>(this ReactiveCommandBase<TParam, TResult> command)
+		{
+			command
+				.ThrownExceptions
+				.SubscribeSafe(LogException);
+			return command;
+		}
+
 		public static void LogThrownExceptions<TParam, TResult>(this ReactiveCommandBase<TParam, TResult> command, CompositeDisposable disposable)
 		{
 			command

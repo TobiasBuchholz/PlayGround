@@ -38,6 +38,7 @@ namespace PlayGround.UI
 		private void RegisterViewModels(IMutableDependencyResolver splatLocator, CompositionRoot compositionRoot)
 		{
 			splatLocator.Register(compositionRoot.ResolveMainViewModel, typeof(IMainViewModel));
+			splatLocator.Register(compositionRoot.ResolveCoversViewModel, typeof(ICoversViewModel));
 		}
 	}
 }
