@@ -9,7 +9,7 @@ namespace PlayGround.UI.iOS
 	[Register("AppDelegate")]
 	public class AppDelegate : UIApplicationDelegate
 	{
-		// class-level declarations
+		private iOSCompositionRoot compositionRoot;
 
 		public override UIWindow Window {
 			get;
@@ -18,9 +18,18 @@ namespace PlayGround.UI.iOS
 
 		public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
 		{
+			this.InitializeCompositionRoot();
+			this.InitializeControlFactory();
+
 			new SplatRegistrar().Register(Locator.CurrentMutable, new iOSCompositionRoot());
 			return true;
 		}
+
+		private void InitializeCompositionRoot() =>
+			this.compositionRoot = new iOSCompositionRoot();
+
+		private void InitializeControlFactory() =>
+			ControlFactory.Initialize(compositionRoot.ResolveSystemNotificationsService());
 
 		public override void OnResignActivation(UIApplication application)
 		{

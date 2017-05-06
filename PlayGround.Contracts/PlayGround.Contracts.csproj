@@ -38,6 +38,7 @@
     <Compile Include="Repositories\ICoversRepository.cs" />
     <Compile Include="Services\ServerApi\IApiServiceFactory.cs" />
     <Compile Include="Services\ServerApi\ISimpleApiService.cs" />
+    <Compile Include="Services\SystemNotification\ISystemNotificationsService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PlayGround.Models\PlayGround.Models.csproj">
@@ -51,6 +52,7 @@
     <Folder Include="Services\HelloWorld\" />
     <Folder Include="Repositories\" />
     <Folder Include="Services\ServerApi\" />
+    <Folder Include="Services\SystemNotification\" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Reactive.Interfaces">

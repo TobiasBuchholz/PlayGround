@@ -1,39 +1,35 @@
-﻿using System;
 using System.Reactive.Disposables;
-using System.Reactive.Linq;
-using CoreGraphics;
-using Genesis.Logging;
 using PlayGround.Contracts.ViewModels;
-using ReactiveUI;
+using PlayGround.UI.iOS.Utility;
 using UIKit;
 
 namespace PlayGround.UI.iOS.Views
 {
 	public class CoversViewController : ViewControllerBase<ICoversViewModel>
 	{
+		private UIButton backButton;
+
 		public CoversViewController()
 		{
-			var logger = LoggerService.GetLogger(this.GetType());
-
-			this.WhenActivated(disposables => {
-				using (logger.Perf("Activation")) 
-				{
-					Observable
-						.Return("")
-						.Subscribe()
-						.DisposeWith(disposables);
-				}
-			});
+			View.BackgroundColor = UIColor.Green;
 		}
 
-		public override void ViewDidLoad()
+		public override void LoadView()
 		{
-			base.ViewDidLoad();
-			View.BackgroundColor = UIColor.Green;
-			var button = new UIButton(new CGRect(100, 100, 100, 100));
-			button.SetTitle("Back", UIControlState.Normal);
-			button.TouchUpInside += (_,__) => DismissViewController(true, null);
-			View.AddSubview(button);
+			base.LoadView();
+
+			backButton = ControlFactory
+				.CreateButton()
+				.DisposeWith(Disposables);
+
+			backButton.SetTitle("Back", UIControlState.Normal);
+			backButton.TouchUpInside += (sender, e) => DismissViewController(true, null);
+
+			View.ConstrainLayout(() =>
+				backButton.CenterX() == View.CenterX() &&
+				backButton.CenterY() == View.CenterY());
+
+			View.AddSubviews(backButton);
 		}
 	}
 }

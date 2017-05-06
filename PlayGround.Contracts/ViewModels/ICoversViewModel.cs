@@ -1,4 +1,4 @@
-﻿namespace PlayGround.Contracts.ViewModels
+namespace PlayGround.Contracts.ViewModels
 {
 	public interface ICoversViewModel
 	{

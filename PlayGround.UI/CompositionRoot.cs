@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using System.Reactive.Concurrency;
 using System.Threading;
 using Genesis.Logging;
 using PlayGround.Contracts.Repositories;
 using PlayGround.Contracts.Services.HelloWorld;
 using PlayGround.Contracts.Services.ServerApi;
+using PlayGround.Contracts.Services.SystemNotifications;
 using PlayGround.Contracts.ViewModels;
 using PlayGround.Repositories;
 using PlayGround.Services.HelloWorld;
@@ -18,6 +19,7 @@ namespace PlayGround.UI
 		// singletons
 		protected readonly Lazy<IScheduler> backgroundScheduler;
 		protected readonly Lazy<IScheduler> mainScheduler;
+		protected readonly Lazy<ISystemNotificationsService> systemNotificationsService;
 		protected readonly Lazy<IApiServiceFactory> apiServiceFactory;
 		protected readonly Lazy<ICoversRepository> coversRepository;
 		protected readonly Lazy<IHelloWorldService> helloWorldService;
@@ -29,15 +31,14 @@ namespace PlayGround.UI
 			logger = LoggerService.GetLogger(GetType());
 			backgroundScheduler = new Lazy<IScheduler>(CreateBackgroundScheduler);
 			mainScheduler = new Lazy<IScheduler>(CreateMainScheduler);
+			systemNotificationsService = new Lazy<ISystemNotificationsService>(this.CreateSystemNotificationsService);
 			apiServiceFactory = new Lazy<IApiServiceFactory>(CreateApiServiceFactory);
 			coversRepository = new Lazy<ICoversRepository>(CreateCoversRepository);
 			helloWorldService = new Lazy<IHelloWorldService>(CreateHelloWorldService);
 		}
 
-		private IScheduler CreateBackgroundScheduler() 
-		{
-			return LoggedCreation(() => new EventLoopScheduler());
-		}
+		private IScheduler CreateBackgroundScheduler() =>
+			LoggedCreation(() => new EventLoopScheduler());
 
 		protected T LoggedCreation<T>(Func<T> factory)
 		{
@@ -48,45 +49,36 @@ namespace PlayGround.UI
 			}
 		}
 
-		private IScheduler CreateMainScheduler() 
-		{
-			return new SynchronizationContextScheduler(SynchronizationContext.Current);
-		}
+		private IScheduler CreateMainScheduler() =>
+			new SynchronizationContextScheduler(SynchronizationContext.Current);
 
-		private IApiServiceFactory CreateApiServiceFactory() 
-		{
-			return LoggedCreation(() => new ApiServiceFactory());
-		}
+		private IApiServiceFactory CreateApiServiceFactory() =>
+			LoggedCreation(() => new ApiServiceFactory());
 
-		private ICoversRepository CreateCoversRepository() 
-		{
-			return LoggedCreation(() => new CoversRepository(apiServiceFactory.Value));
-		}
+		private ICoversRepository CreateCoversRepository() =>
+			LoggedCreation(() => new CoversRepository(apiServiceFactory.Value));
 
-		private IHelloWorldService CreateHelloWorldService() 
-		{
-			return LoggedCreation(() => new HelloWorldService());
-		}
+		protected abstract ISystemNotificationsService CreateSystemNotificationsService();
 
-		public IMainViewModel ResolveMainViewModel()
-		{
-			return LoggedCreation(() => new MainViewModel(helloWorldService.Value));
-		}
+		private IHelloWorldService CreateHelloWorldService() =>
+			LoggedCreation(() => new HelloWorldService());
 
-		public ICoversViewModel ResolveCoversViewModel()
-		{
-			return LoggedCreation(() => new CoversViewModel(coversRepository.Value));
-		}
+		public IMainViewModel ResolveMainViewModel() => 
+			LoggedCreation(() => new MainViewModel(helloWorldService.Value));
 
-		public IHelloWorldService ResolveHelloWorldService()
-		{
-			return helloWorldService.Value;
-		}
+		public ICoversViewModel ResolveCoversViewModel() =>
+			LoggedCreation(() => new CoversViewModel(coversRepository.Value));
+
+		public ISystemNotificationsService ResolveSystemNotificationsService() =>
+			systemNotificationsService.Value;
 
 		public IApiServiceFactory ResolveApiServiceFactory() => 
 			apiServiceFactory.Value;
 
 		public ICoversRepository ResolveCoversRepository() => 
 			coversRepository.Value;
+
+		public IHelloWorldService ResolveHelloWorldService() =>
+			helloWorldService.Value;
 	}
 }
