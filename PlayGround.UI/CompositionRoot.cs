@@ -11,6 +11,7 @@ using PlayGround.Repositories;
 using PlayGround.Services.HelloWorld;
 using PlayGround.Services.ServerApi;
 using PlayGround.ViewModels;
+using Realms;
 
 namespace PlayGround.UI
 {
@@ -56,7 +57,10 @@ namespace PlayGround.UI
 			LoggedCreation(() => new ApiServiceFactory());
 
 		private ICoversRepository CreateCoversRepository() =>
-			LoggedCreation(() => new CoversRepository(apiServiceFactory.Value));
+			LoggedCreation(() => 
+		                   new CoversRepository(
+			                   () => Realm.GetInstance(),
+			                   apiServiceFactory.Value));
 
 		protected abstract ISystemNotificationsService CreateSystemNotificationsService();
 

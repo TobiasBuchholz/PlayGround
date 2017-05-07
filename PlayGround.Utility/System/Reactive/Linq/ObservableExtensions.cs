@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
@@ -144,6 +145,36 @@ namespace System.Reactive.Linq
 					action(t);
 				}
 			});
+		}
+
+		public static IObservable<T> Debug<T>(this IObservable<T> source, Func<T, string> debugMessage)
+		{
+			Ensure.ArgumentNotNull(source, nameof(source));
+			return source.Do(t => Diagnostics.Debug.WriteLine(debugMessage(t)));
+		}
+
+		public static IObservable<T> DebugWriteLine<T>(this IObservable<T> source)
+		{
+			Ensure.ArgumentNotNull(source, nameof(source));
+			return source.Do(t => Diagnostics.Debug.WriteLine(t));
+		}
+
+		public static IObservable<IEnumerable<T>> WhereIsEmpty<T>(this IObservable<IEnumerable<T>> source)
+		{
+			Ensure.ArgumentNotNull(source, nameof(source));
+			return source.Where(x => x.Count() == 0);
+		}
+
+		public static IObservable<IEnumerable<T>> WhereHasItems<T>(this IObservable<IEnumerable<T>> source)
+		{
+			Ensure.ArgumentNotNull(source, nameof(source));
+			return source.Where(x => x.Count() > 0);
+		}
+
+		public static IObservable<T> WhereNotNull<T>(this IObservable<T> source)
+		{
+			Ensure.ArgumentNotNull(source, nameof(source));
+			return source.Where(x => x != null);
 		}
 	}
 }

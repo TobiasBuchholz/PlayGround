@@ -1,27 +1,29 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
+using Realms;
 
 namespace PlayGround.Models
 {
-	public class CoversContainer
+	public class CoversContainer : RealmObject
 	{
 		[JsonProperty("_embedded")]
-		private readonly CoversContainerEmbedded _embedded;
+		public CoversContainerEmbedded Embedded { get; set; }
 
+		[Ignored]
 		public IEnumerable<Cover> Covers { 
 			get { 
-				if(_embedded == null) {
+				if(Embedded == null) {
 					return new List<Cover>();
 				} else {
-					return _embedded.Covers;
+					return Embedded.Covers;
 				}
 			}
 		}
 	}
 
-	public class CoversContainerEmbedded
+	public class CoversContainerEmbedded : RealmObject
 	{
 		[JsonProperty("editions")]
-		public IList<Cover> Covers { get; set; }
+		public IList<Cover> Covers { get; }
 	}
 }
