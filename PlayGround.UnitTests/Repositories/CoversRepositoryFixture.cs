@@ -18,7 +18,7 @@ namespace PlayGround.UnitTests.Repositories
 		public async Task get_covers_returns_covers()
 		{
 			var sut = new CoversRepository(
-				() => RealmExtensions.GetInstanceWithoutCapturingContext(),
+				new TestRealmProvider(),
 				new ApiServiceFactoryMock());
 
 			var covers = await sut
@@ -47,7 +47,7 @@ namespace PlayGround.UnitTests.Repositories
 				.Return(coversApiServiceMock);
 
 			var sut = new CoversRepository(
-				() => RealmExtensions.GetInstanceWithoutCapturingContext(),
+				new TestRealmProvider(),
 				apiServiceFactory);
 			
 			await sut.UpdateCovers().ToTask();
@@ -74,7 +74,7 @@ namespace PlayGround.UnitTests.Repositories
 				.Return(coversApiServiceMock);
 
 			var sut = new CoversRepository(
-				() => RealmExtensions.GetInstanceWithoutCapturingContext(),
+				new TestRealmProvider(),
 				apiServiceFactory);
 
 			var countTask = sut

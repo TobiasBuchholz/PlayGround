@@ -11,7 +11,6 @@ using PlayGround.Repositories;
 using PlayGround.Services.HelloWorld;
 using PlayGround.Services.ServerApi;
 using PlayGround.ViewModels;
-using Realms;
 
 namespace PlayGround.UI
 {
@@ -59,7 +58,7 @@ namespace PlayGround.UI
 		private ICoversRepository CreateCoversRepository() =>
 			LoggedCreation(() => 
 		                   new CoversRepository(
-			                   () => Realm.GetInstance(),
+			                   new RealmProvider(),
 			                   apiServiceFactory.Value));
 
 		protected abstract ISystemNotificationsService CreateSystemNotificationsService();
@@ -71,7 +70,10 @@ namespace PlayGround.UI
 			LoggedCreation(() => new MainViewModel(helloWorldService.Value));
 
 		public ICoversViewModel ResolveCoversViewModel() =>
-			LoggedCreation(() => new CoversViewModel(coversRepository.Value));
+			LoggedCreation(() => 
+		                   new CoversViewModel(
+			                   coversRepository.Value,
+			                   (cover, index) => new CoverViewModel()));
 
 		public ISystemNotificationsService ResolveSystemNotificationsService() =>
 			systemNotificationsService.Value;

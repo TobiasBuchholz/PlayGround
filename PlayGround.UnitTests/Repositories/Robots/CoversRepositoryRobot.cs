@@ -1,7 +1,6 @@
 ﻿using PlayGround.Contracts.Repositories;
 using PlayGround.Repositories;
 using PlayGround.UnitTests.TestUtils;
-using Realms;
 
 namespace PlayGround.UnitTests.Repositories.Robots
 {
@@ -17,7 +16,7 @@ namespace PlayGround.UnitTests.Repositories.Robots
 		{
 			base.Build();
 			_sut = new CoversRepository(
-				() => RealmExtensions.GetInstanceWithoutCapturingContext(),
+				new TestRealmProvider(),
 				_apiServiceFactory);
 			return this;
 		}

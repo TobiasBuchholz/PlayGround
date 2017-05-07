@@ -11,19 +11,17 @@ using Realms;
 
 namespace PlayGround.Repositories
 {
-	public delegate Realm RealmFactory();
-
 	public class CoversRepository : ICoversRepository
 	{
-		private readonly RealmFactory _realmFactory;
+		private readonly IRealmProvider _realmProvider;
 		private readonly IApiServiceFactory _apiServiceFactory;
 		private readonly ISubject<IEnumerable<Cover>> _allSubject;
 
 		public CoversRepository(
-			RealmFactory realmFactory,
+			IRealmProvider realmProvider,
 			IApiServiceFactory apiServiceFactory)
 		{
-			_realmFactory = realmFactory;
+			_realmProvider = realmProvider;
 			_apiServiceFactory = apiServiceFactory;
 			_allSubject = new Subject<IEnumerable<Cover>>();
 
@@ -32,7 +30,7 @@ namespace PlayGround.Repositories
 
 		private IOrderedQueryable<Cover> CreateCoversQueryable()
 		{
-			return _realmFactory()
+			return _realmProvider.GetRealm()
 				.All<Cover>()
 				.OrderByDescending(x => x.PublishedAt);
 		}
@@ -51,7 +49,7 @@ namespace PlayGround.Repositories
 				.AuthorizedGet("Token c8596c725360d4ff0dc6")
 				.Do(x => 
 				{
-					var realm = _realmFactory();
+					var realm = _realmProvider.GetRealm();
 					realm.Write(() => realm.Add(x, update:true));
 				})
 				.ToSignal();

@@ -37,6 +37,11 @@ namespace System.Reactive.Linq
 				         .Select(x => x.Item);
 		}
 
+		public static IObservable<T> DoOnError<T>(this IObservable<T> source, Action<Exception> action)
+		{
+			return source.Do(_ => {}, action);
+		}
+
 		public static IObservable<T> DoOnCompleted<T>(this IObservable<T> source, Action action)
 		{
 			return source.Do(_ => {}, action);
@@ -92,8 +97,8 @@ namespace System.Reactive.Linq
 
 		private static void LogException(Exception e)
 		{
-			var logger = LoggerService.GetLogger(typeof(SubscribeSafeExtensions));
-			logger.Warn(e, "An exception was catched.");
+			var logger = LoggerService.GetLogger(typeof(ObservableExtensions));
+			logger.Warn(e, "An exception was catched:\n");
 		}
 
 		public static IObservable<T> CatchAndLogException<T>(this IObservable<T> source, IObservable<T> second = null)
@@ -135,16 +140,40 @@ namespace System.Reactive.Linq
 				        .FirstAsync();
 		}
 
-		public static IObservable<T> DoWhere<T>(this IObservable<T> @this, Func<T, bool> predicate, Action<T> action)
+		public static IObservable<T> DoWhere<T>(this IObservable<T> source, Func<T, bool> predicate, Action<T> action)
 		{
-			Ensure.ArgumentNotNull(@this, nameof(@this));
+			Ensure.ArgumentNotNull(source, nameof(source));
 			Ensure.ArgumentNotNull(predicate, nameof(predicate));
 
-			return @this.Do(t => {
+			return source.Do(t => {
 				if(predicate(t)) {
 					action(t);
 				}
 			});
+		}
+
+		public static IObservable<bool> WhereIsTrue(this IObservable<bool> source)
+		{
+			Ensure.ArgumentNotNull(source, nameof(source));
+			return source.Where(x => x);
+		}
+
+		public static IObservable<bool> WhereIsFalse(this IObservable<bool> source)
+		{
+			Ensure.ArgumentNotNull(source, nameof(source));
+			return source.Where(x => !x);
+		}
+
+		public static IObservable<T> Iterate<T>(this IObservable<IEnumerable<T>> source)
+		{
+			Ensure.ArgumentNotNull(source, nameof(source));
+			return source.SelectMany(item => item);
+		}
+
+		public static IObservable<bool> Negate(this IObservable<bool> source)
+		{
+			Ensure.ArgumentNotNull(source, nameof(source));
+			return source.Select(x => !x);
 		}
 
 		public static IObservable<T> Debug<T>(this IObservable<T> source, Func<T, string> debugMessage)

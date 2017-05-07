@@ -10,7 +10,7 @@ namespace PlayGround.Models
 		public CoversContainerEmbedded Embedded { get; set; }
 
 		[Ignored]
-		public IEnumerable<Cover> Covers { 
+		public IList<Cover> Covers { 
 			get { 
 				if(Embedded == null) {
 					return new List<Cover>();
