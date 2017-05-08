@@ -18,18 +18,19 @@ namespace PlayGround.ViewModels
 		private readonly ViewModelActivator _activator;
 		private readonly CoverViewModelFactory _coverViewModelFactory;
 
-		private ObservableAsPropertyHelper<IReactiveList<ICoverViewModel>> _coverViewModels;
+		private ObservableAsPropertyHelper<ReactiveList<ICoverViewModel>> _coverViewModels;
 
 		public CoversViewModel(
 			ICoversRepository coversRepository,
 			CoverViewModelFactory coverViewModelFactory)
 		{
-			_logger = LoggerService.GetLogger(this.GetType());
+			_logger = LoggerService.GetLogger(GetType());
 			_activator = new ViewModelActivator();
 			_coverViewModelFactory = coverViewModelFactory;
 
 			coversRepository
 				.GetCovers()
+				.Do(_ => _coverViewModels?.Value?.Clear())
 				.Iterate()
 				.Select((cover, index) => _coverViewModelFactory(cover, index))
 				.Scan(new ReactiveList<ICoverViewModel>(), (x, y) => { x.Add(y); return x; })
@@ -47,6 +48,6 @@ namespace PlayGround.ViewModels
 		}
 
 		public ViewModelActivator Activator => _activator;
-		public IReactiveList<ICoverViewModel> CoverViewModels => _coverViewModels.Value;
+		public ReactiveList<ICoverViewModel> CoverViewModels => _coverViewModels.Value;
 	}
 }

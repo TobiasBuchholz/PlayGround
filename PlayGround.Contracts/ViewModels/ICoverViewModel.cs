@@ -1,6 +1,8 @@
-﻿namespace PlayGround.Contracts.ViewModels
+﻿using ReactiveUI;
+namespace PlayGround.Contracts.ViewModels
 {
-	public interface ICoverViewModel
+	public interface ICoverViewModel : IReactiveObject
 	{
+		string Title { get; }
 	}
 }

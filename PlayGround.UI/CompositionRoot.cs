@@ -73,7 +73,7 @@ namespace PlayGround.UI
 			LoggedCreation(() => 
 		                   new CoversViewModel(
 			                   coversRepository.Value,
-			                   (cover, index) => new CoverViewModel()));
+			                   (cover, index) => new CoverViewModel(cover)));
 
 		public ISystemNotificationsService ResolveSystemNotificationsService() =>
 			systemNotificationsService.Value;
