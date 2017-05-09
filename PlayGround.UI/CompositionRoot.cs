@@ -6,10 +6,12 @@ using PlayGround.Contracts.Repositories;
 using PlayGround.Contracts.Services.HelloWorld;
 using PlayGround.Contracts.Services.ServerApi;
 using PlayGround.Contracts.Services.SystemNotifications;
+using PlayGround.Contracts.Services.Web;
 using PlayGround.Contracts.ViewModels;
 using PlayGround.Repositories;
 using PlayGround.Services.HelloWorld;
 using PlayGround.Services.ServerApi;
+using PlayGround.Services.Web;
 using PlayGround.ViewModels;
 
 namespace PlayGround.UI
@@ -21,6 +23,7 @@ namespace PlayGround.UI
 		protected readonly Lazy<IScheduler> mainScheduler;
 		protected readonly Lazy<ISystemNotificationsService> systemNotificationsService;
 		protected readonly Lazy<IApiServiceFactory> apiServiceFactory;
+		protected readonly Lazy<IHttpClientService> httpClientService;
 		protected readonly Lazy<ICoversRepository> coversRepository;
 		protected readonly Lazy<IHelloWorldService> helloWorldService;
 
@@ -32,6 +35,7 @@ namespace PlayGround.UI
 			backgroundScheduler = new Lazy<IScheduler>(CreateBackgroundScheduler);
 			mainScheduler = new Lazy<IScheduler>(CreateMainScheduler);
 			systemNotificationsService = new Lazy<ISystemNotificationsService>(this.CreateSystemNotificationsService);
+			httpClientService = new Lazy<IHttpClientService>(CreateHttpClientService);
 			apiServiceFactory = new Lazy<IApiServiceFactory>(CreateApiServiceFactory);
 			coversRepository = new Lazy<ICoversRepository>(CreateCoversRepository);
 			helloWorldService = new Lazy<IHelloWorldService>(CreateHelloWorldService);
@@ -51,6 +55,9 @@ namespace PlayGround.UI
 
 		private IScheduler CreateMainScheduler() =>
 			new SynchronizationContextScheduler(SynchronizationContext.Current);
+
+		private IHttpClientService CreateHttpClientService() =>
+			LoggedCreation(() => new HttpClientService());
 
 		private IApiServiceFactory CreateApiServiceFactory() =>
 			LoggedCreation(() => new ApiServiceFactory());
@@ -73,13 +80,18 @@ namespace PlayGround.UI
 			LoggedCreation(() => 
 		                   new CoversViewModel(
 			                   coversRepository.Value,
-			                   (cover, index) => new CoverViewModel(cover)));
+			                   (cover, index) => new CoverViewModel(
+				                   cover, 
+				                   httpClientService.Value)));
 
 		public ISystemNotificationsService ResolveSystemNotificationsService() =>
 			systemNotificationsService.Value;
 
 		public IApiServiceFactory ResolveApiServiceFactory() => 
 			apiServiceFactory.Value;
+
+		public IHttpClientService ResolveHttpClientService() => 
+			httpClientService.Value;
 
 		public ICoversRepository ResolveCoversRepository() => 
 			coversRepository.Value;

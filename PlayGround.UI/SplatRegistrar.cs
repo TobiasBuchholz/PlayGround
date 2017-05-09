@@ -3,6 +3,7 @@ using Genesis.Logging;
 using PlayGround.Contracts.Repositories;
 using PlayGround.Contracts.Services.HelloWorld;
 using PlayGround.Contracts.Services.ServerApi;
+using PlayGround.Contracts.Services.Web;
 using PlayGround.Contracts.ViewModels;
 using Splat;
 
@@ -30,6 +31,7 @@ namespace PlayGround.UI
 
 		private void RegisterServices(IMutableDependencyResolver splatLocator, CompositionRoot compositionRoot)
 		{
+			splatLocator.RegisterConstant(compositionRoot.ResolveHttpClientService(), typeof(IHttpClientService));
 			splatLocator.RegisterConstant(compositionRoot.ResolveApiServiceFactory(), typeof(IApiServiceFactory));
 			splatLocator.RegisterConstant(compositionRoot.ResolveHelloWorldService(), typeof(IHelloWorldService));
 		}

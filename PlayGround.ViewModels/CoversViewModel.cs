@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Genesis.Logging;
@@ -17,8 +16,7 @@ namespace PlayGround.ViewModels
 		private readonly ILogger _logger;
 		private readonly ViewModelActivator _activator;
 		private readonly CoverViewModelFactory _coverViewModelFactory;
-
-		private ObservableAsPropertyHelper<ReactiveList<ICoverViewModel>> _coverViewModels;
+		private readonly ObservableAsPropertyHelper<ReactiveList<ICoverViewModel>> _coverViewModels;
 
 		public CoversViewModel(
 			ICoversRepository coversRepository,

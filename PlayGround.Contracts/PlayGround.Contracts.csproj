@@ -41,6 +41,7 @@
     <Compile Include="Services\SystemNotification\ISystemNotificationsService.cs" />
     <Compile Include="Repositories\IRealmProvider.cs" />
     <Compile Include="ViewModels\ICoverViewModel.cs" />
+    <Compile Include="Services\Web\IHttpClientService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PlayGround.Models\PlayGround.Models.csproj">
@@ -55,6 +56,7 @@
     <Folder Include="Repositories\" />
     <Folder Include="Services\ServerApi\" />
     <Folder Include="Services\SystemNotification\" />
+    <Folder Include="Services\Web\" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Reactive.Interfaces">

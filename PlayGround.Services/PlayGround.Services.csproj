@@ -34,6 +34,7 @@
     </Compile>
     <Compile Include="HelloWorld\HelloWorldService.cs" />
     <Compile Include="ServerApi\ApiServiceFactory.cs" />
+    <Compile Include="Web\HttpClientService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PlayGround.Contracts\PlayGround.Contracts.csproj">
@@ -52,6 +53,7 @@
   <ItemGroup>
     <Folder Include="HelloWorld\" />
     <Folder Include="ServerApi\" />
+    <Folder Include="Web\" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Reactive.Interfaces">
