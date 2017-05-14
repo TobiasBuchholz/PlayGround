@@ -80,7 +80,7 @@ namespace PlayGround.UI
 			LoggedCreation(() => 
 		                   new CoversViewModel(
 			                   coversRepository.Value,
-			                   (cover, index) => new CoverViewModel(
+			                   cover => new CoverViewModel(
 				                   cover, 
 				                   httpClientService.Value)));
 
