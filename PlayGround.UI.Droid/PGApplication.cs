@@ -8,6 +8,8 @@ namespace PlayGround.UI.Droid
 	[Application]
 	public class PGApplication : Application
 	{
+        public static PGApplication Instance { get; private set; }
+
 		public PGApplication(IntPtr handle, JniHandleOwnership transfer)
 			: base(handle,transfer)
 		{
@@ -15,8 +17,9 @@ namespace PlayGround.UI.Droid
 
 		public override void OnCreate()
 		{
-			base.OnCreate();
-			new SplatRegistrar().Register(Locator.CurrentMutable, new AndroidCompositionRoute());
+            base.OnCreate();
+            Instance = this;
+            new SplatRegistrar().Register(Locator.CurrentMutable, new AndroidCompositionRoute());
 		}
 	}
 }

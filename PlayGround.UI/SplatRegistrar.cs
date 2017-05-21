@@ -1,5 +1,6 @@
 ﻿using Genesis.Ensure;
 using Genesis.Logging;
+using PCLFirebase.Contracts;
 using PlayGround.Contracts.Repositories;
 using PlayGround.Contracts.Services.HelloWorld;
 using PlayGround.Contracts.Services.ServerApi;
@@ -34,6 +35,7 @@ namespace PlayGround.UI
 			splatLocator.RegisterConstant(compositionRoot.ResolveHttpClientService(), typeof(IHttpClientService));
 			splatLocator.RegisterConstant(compositionRoot.ResolveApiServiceFactory(), typeof(IApiServiceFactory));
 			splatLocator.RegisterConstant(compositionRoot.ResolveHelloWorldService(), typeof(IHelloWorldService));
+            splatLocator.RegisterConstant(compositionRoot.ResolveFirebaseService(), typeof(IPCLFirebaseService));
 		}
 
 		private void RegisterRepositories(IMutableDependencyResolver splatLocator, CompositionRoot compositionRoot)

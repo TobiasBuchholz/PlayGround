@@ -3,6 +3,7 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Genesis.Logging;
+using PCLFirebase.Contracts;
 using PlayGround.Contracts.Services.HelloWorld;
 using PlayGround.Contracts.ViewModels;
 using PlayGround.Models;
@@ -12,29 +13,39 @@ namespace PlayGround.ViewModels
 {
 	public class MainViewModel : ReactiveObject, IMainViewModel, ISupportsActivation
 	{
-		private readonly ILogger logger;
-		private readonly ViewModelActivator activator;
-		private readonly IHelloWorldService helloWorldService;
+        private readonly ILogger _logger;
+        private readonly ViewModelActivator _activator;
+        private readonly IHelloWorldService _helloWorldService;
 
 		private ObservableAsPropertyHelper<string> helloWorldText;
 		private ReactiveCommandBase<Unit, HelloWorldModel> loadHelloWorld;
 
-		public MainViewModel(IHelloWorldService helloWorldService)
+		public MainViewModel(
+            IHelloWorldService helloWorldService,
+            IPCLFirebaseService firebaseService,
+            GroceryItemFactory groceryItemFactory)
 		{
-			this.logger = LoggerService.GetLogger(this.GetType());
-			this.activator = new ViewModelActivator();
-			this.helloWorldService = helloWorldService;
+			_logger = LoggerService.GetLogger(GetType());
+			_activator = new ViewModelActivator();
+			_helloWorldService = helloWorldService;
 
 			InitCommands();
 			InitProperties();
 
 			this.WhenActivated(disposables => {
-				using (this.logger.Perf("Activation")) 
+				using (_logger.Perf("Activation")) 
 				{
 					loadHelloWorld
 						.Execute()
 						.SubscribeSafe()
 						.DisposeWith(disposables);	
+
+                    firebaseService
+                        .RootNode
+                        .GetChild("grocery-items")
+                        .ObserveValueChanged(x => groceryItemFactory(x))
+                        .DebugWriteLine()
+                        .SubscribeSafe();
 				}
 			});
 		}
@@ -42,7 +53,7 @@ namespace PlayGround.ViewModels
 		private void InitCommands()
 		{
 			loadHelloWorld = ReactiveCommand
-				.CreateFromObservable(() => helloWorldService.GetHelloWorld())
+				.CreateFromObservable(() => _helloWorldService.GetHelloWorld())
 				.LogThrownExceptions();
 		}
 
@@ -54,7 +65,7 @@ namespace PlayGround.ViewModels
 		}
 
 		#region properties
-		public ViewModelActivator Activator => activator;
+		public ViewModelActivator Activator => _activator;
 		public string HelloWorldText => helloWorldText.Value;
  		#endregion
 	}

@@ -48,6 +48,10 @@
       <Project>{B7A471A8-67AA-4B24-9CC6-360569B68AB8}</Project>
       <Name>PlayGround.Models</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PCLFirebase.Contracts\PCLFirebase.Contracts.csproj">
+      <Project>{8B696F37-CFDD-4912-BA71-E79AD4CE71C9}</Project>
+      <Name>PCLFirebase.Contracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ViewModels\" />

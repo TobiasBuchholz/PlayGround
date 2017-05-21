@@ -49,6 +49,10 @@
       <Project>{84096C67-6AFB-4BAA-9E43-922C1DF4CB70}</Project>
       <Name>PlayGround.Utility</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PCLFirebase.Contracts\PCLFirebase.Contracts.csproj">
+      <Project>{8B696F37-CFDD-4912-BA71-E79AD4CE71C9}</Project>
+      <Name>PCLFirebase.Contracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Reactive.Interfaces">

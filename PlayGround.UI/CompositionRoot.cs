@@ -2,6 +2,7 @@ using System;
 using System.Reactive.Concurrency;
 using System.Threading;
 using Genesis.Logging;
+using PCLFirebase.Contracts;
 using PlayGround.Contracts.Repositories;
 using PlayGround.Contracts.Services.HelloWorld;
 using PlayGround.Contracts.Services.ServerApi;
@@ -19,29 +20,31 @@ namespace PlayGround.UI
 	public abstract class CompositionRoot
 	{
 		// singletons
-		protected readonly Lazy<IScheduler> backgroundScheduler;
-		protected readonly Lazy<IScheduler> mainScheduler;
-		protected readonly Lazy<ISystemNotificationsService> systemNotificationsService;
-		protected readonly Lazy<IApiServiceFactory> apiServiceFactory;
-		protected readonly Lazy<IHttpClientService> httpClientService;
-		protected readonly Lazy<ICoversRepository> coversRepository;
-		protected readonly Lazy<IHelloWorldService> helloWorldService;
+        protected readonly Lazy<IScheduler> _backgroundScheduler;
+        protected readonly Lazy<IScheduler> _mainScheduler;
+        protected readonly Lazy<ISystemNotificationsService> _systemNotificationsService;
+        protected readonly Lazy<IApiServiceFactory> _apiServiceFactory;
+        protected readonly Lazy<IHttpClientService> _httpClientService;
+        protected readonly Lazy<ICoversRepository> _coversRepository;
+        protected readonly Lazy<IHelloWorldService> _helloWorldService;
+        protected readonly Lazy<IPCLFirebaseService> _firebaseService;
 
 		private readonly ILogger logger;
 
 		protected CompositionRoot()
 		{
 			logger = LoggerService.GetLogger(GetType());
-			backgroundScheduler = new Lazy<IScheduler>(CreateBackgroundScheduler);
-			mainScheduler = new Lazy<IScheduler>(CreateMainScheduler);
-			systemNotificationsService = new Lazy<ISystemNotificationsService>(this.CreateSystemNotificationsService);
-			httpClientService = new Lazy<IHttpClientService>(CreateHttpClientService);
-			apiServiceFactory = new Lazy<IApiServiceFactory>(CreateApiServiceFactory);
-			coversRepository = new Lazy<ICoversRepository>(CreateCoversRepository);
-			helloWorldService = new Lazy<IHelloWorldService>(CreateHelloWorldService);
+			_backgroundScheduler = new Lazy<IScheduler>(CreateBackgroundScheduler);
+			_mainScheduler = new Lazy<IScheduler>(CreateMainScheduler);
+			_systemNotificationsService = new Lazy<ISystemNotificationsService>(this.CreateSystemNotificationsService);
+			_httpClientService = new Lazy<IHttpClientService>(CreateHttpClientService);
+			_apiServiceFactory = new Lazy<IApiServiceFactory>(CreateApiServiceFactory);
+			_coversRepository = new Lazy<ICoversRepository>(CreateCoversRepository);
+			_helloWorldService = new Lazy<IHelloWorldService>(CreateHelloWorldService);
+            _firebaseService = new Lazy<IPCLFirebaseService>(CreateFirebaseService);
 		}
 
-		private IScheduler CreateBackgroundScheduler() =>
+        private IScheduler CreateBackgroundScheduler() =>
 			LoggedCreation(() => new EventLoopScheduler());
 
 		protected T LoggedCreation<T>(Func<T> factory)
@@ -66,37 +69,41 @@ namespace PlayGround.UI
 			LoggedCreation(() => 
 		                   new CoversRepository(
 			                   new RealmProvider(),
-			                   apiServiceFactory.Value));
+			                   _apiServiceFactory.Value));
 
 		protected abstract ISystemNotificationsService CreateSystemNotificationsService();
 
 		private IHelloWorldService CreateHelloWorldService() =>
 			LoggedCreation(() => new HelloWorldService());
 
-		public IMainViewModel ResolveMainViewModel() => 
-			LoggedCreation(() => new MainViewModel(helloWorldService.Value));
+        protected abstract IPCLFirebaseService CreateFirebaseService();
+
+        public abstract IMainViewModel ResolveMainViewModel();
 
 		public ICoversViewModel ResolveCoversViewModel() =>
 			LoggedCreation(() => 
 		                   new CoversViewModel(
-			                   coversRepository.Value,
+			                   _coversRepository.Value,
 			                   cover => new CoverViewModel(
 				                   cover, 
-				                   httpClientService.Value)));
+				                   _httpClientService.Value)));
 
 		public ISystemNotificationsService ResolveSystemNotificationsService() =>
-			systemNotificationsService.Value;
+			_systemNotificationsService.Value;
 
 		public IApiServiceFactory ResolveApiServiceFactory() => 
-			apiServiceFactory.Value;
+			_apiServiceFactory.Value;
 
 		public IHttpClientService ResolveHttpClientService() => 
-			httpClientService.Value;
+			_httpClientService.Value;
 
 		public ICoversRepository ResolveCoversRepository() => 
-			coversRepository.Value;
+			_coversRepository.Value;
 
 		public IHelloWorldService ResolveHelloWorldService() =>
-			helloWorldService.Value;
+			_helloWorldService.Value;
+
+        public IPCLFirebaseService ResolveFirebaseService() =>
+            _firebaseService.Value;
 	}
 }
