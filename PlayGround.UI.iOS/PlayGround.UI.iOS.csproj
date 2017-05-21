@@ -176,7 +176,6 @@
     <Folder Include="Views\" />
     <Folder Include="Properties\" />
     <Folder Include="Utility\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\Base.lproj\Main.storyboard" />
@@ -210,7 +209,6 @@
     <Compile Include="ControlFactory.cs" />
     <Compile Include="PreferredFont.cs" />
     <Compile Include="Resources.cs" />
-    <Compile Include="Models\GroceryItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\Base.lproj\Localizable.strings" />

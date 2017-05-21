@@ -78,7 +78,11 @@ namespace PlayGround.UI
 
         protected abstract IPCLFirebaseService CreateFirebaseService();
 
-        public abstract IMainViewModel ResolveMainViewModel();
+        public IMainViewModel ResolveMainViewModel() => 
+            LoggedCreation(() => 
+                            new MainViewModel(
+                                _helloWorldService.Value,
+                                _firebaseService.Value));
 
 		public ICoversViewModel ResolveCoversViewModel() =>
 			LoggedCreation(() => 

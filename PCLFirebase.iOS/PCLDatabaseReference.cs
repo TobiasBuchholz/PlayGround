@@ -3,6 +3,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Firebase.Database;
 using Foundation;
+using Newtonsoft.Json;
 using PCLFirebase.Contracts;
 
 namespace PCLFirebase.iOS
@@ -24,16 +25,26 @@ namespace PCLFirebase.iOS
             return new PCLDatabaseReference(_databaseReference.GetChild(path));
         }
 
-        public void SetValue(IPCLFirebaseObject firebaseObject)
+        public void SetValue<T>(T item)
         {
-            _databaseReference.SetValue(firebaseObject.ToDictionary() as NSDictionary);
+            var data = NSData.FromString(JsonConvert.SerializeObject(item));
+            _databaseReference.SetValue(NSJsonSerialization.Deserialize(data, NSJsonReadingOptions.MutableContainers, out NSError error));
         }
 
-        public IObservable<T> ObserveValueChanged<T>(Func<object, T> factory) where T : IPCLFirebaseObject
+        public IObservable<T> ObserveValueChanged<T>()
         {
             return _dataChange
                 .AsObservable()
-                .Select(x => factory(x.GetValue()));
+                .Select(x => GetValueFromSnapshot<T>(x));
+        }
+
+        private T GetValueFromSnapshot<T>(DataSnapshot x)
+        {
+            return JsonConvert
+                .DeserializeObject<T>(
+                    NSJsonSerialization.Serialize(x.GetValue(), 
+                                                  NSJsonWritingOptions.PrettyPrinted, 
+                                                  out NSError error).ToString());
         }
     }
 }

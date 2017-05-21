@@ -22,8 +22,7 @@ namespace PlayGround.ViewModels
 
 		public MainViewModel(
             IHelloWorldService helloWorldService,
-            IPCLFirebaseService firebaseService,
-            GroceryItemFactory groceryItemFactory)
+            IPCLFirebaseService firebaseService)
 		{
 			_logger = LoggerService.GetLogger(GetType());
 			_activator = new ViewModelActivator();
@@ -42,9 +41,9 @@ namespace PlayGround.ViewModels
 
                     firebaseService
                         .RootNode
-                        .GetChild("grocery-items")
-                        .ObserveValueChanged(x => groceryItemFactory(x))
-                        .DebugWriteLine()
+                        .GetChild("colors")
+                        .ObserveValueChanged<Color>()
+						.DebugWriteLine()
                         .SubscribeSafe();
 				}
 			});

@@ -165,7 +165,6 @@
     <Compile Include="AndroidCompositionRoute.cs" />
     <Compile Include="Views\CoversActivity.cs" />
     <Compile Include="Adapters\CoversRecyclerAdapter.cs" />
-    <Compile Include="Models\GroceryItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -193,7 +192,6 @@
     <Folder Include="Resources\layout\" />
     <Folder Include="Views\" />
     <Folder Include="Adapters\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PlayGround.Contracts\PlayGround.Contracts.csproj">
