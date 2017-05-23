@@ -33,5 +33,23 @@ namespace PlayGround.Models
 
 		[JsonProperty("filesize")]
 		public long FileSize { get; set; }
-	}
+
+        [JsonProperty("_links")]
+        public CoverLinks Links { get; set;}
+    }
+
+    public class CoverLinks : RealmObject
+    {
+        [JsonProperty("cover")]
+        public JsonHalLink ImageLink { get; set; }
+
+        [JsonProperty("cover_uncut")]
+        public JsonHalLink ImageUncutLink { get; set; }
+    }
+
+    public class JsonHalLink : RealmObject
+    {
+        [JsonProperty("href")]
+        public string Href { get; set; }
+    }
 }

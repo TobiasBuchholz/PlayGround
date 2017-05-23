@@ -1,5 +1,7 @@
 using System;
 using System.Reactive.Disposables;
+using FFImageLoading;
+using FFImageLoading.Svg.Platform;
 using Genesis.Logging;
 using PlayGround.Contracts.ViewModels;
 using PlayGround.UI.iOS.Utility;
@@ -44,8 +46,13 @@ namespace PlayGround.UI.iOS
 			var imageView = ControlFactory
 				.CreateImage()
 				.DisposeWith(Disposables);
-			imageView.BackgroundColor = UIColor.Yellow;
-			imageView.Alpha = 0.5f;
+            imageView.ContentMode = UIViewContentMode.ScaleAspectFill;
+
+            ImageService
+                .Instance
+                .LoadFile("Images/sample.svg")
+                .WithCustomDataResolver(new SvgDataResolver(0, (int) View.Frame.Height, true))
+                .Into(imageView);
 
 			View.ConstrainLayout(() =>
 				bottomLabel.Left() == View.Left() + Layout.StandardSuperviewSpacing &&

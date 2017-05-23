@@ -4,5 +4,6 @@ namespace PlayGround.Contracts.ViewModels
 	public interface ICoverViewModel : IReactiveObject
 	{
 		string Title { get; }
+        string ImageUrl { get; }
 	}
 }

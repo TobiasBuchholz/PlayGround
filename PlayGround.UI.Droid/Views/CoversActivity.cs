@@ -33,7 +33,7 @@ namespace PlayGround.UI.Droid.Views
 		{
 			var recyclerView = FindViewById<RecyclerView>(Resource.Id.activity_covers_recycler_view);
 			var adapter = new CoversRecyclerAdapter(ViewModel.CoverViewModels);
-			recyclerView.SetLayoutManager(new GridLayoutManager(this, 3));
+			recyclerView.SetLayoutManager(new GridLayoutManager(this, 2));
 			recyclerView.SetAdapter(adapter);
 		}
 	}

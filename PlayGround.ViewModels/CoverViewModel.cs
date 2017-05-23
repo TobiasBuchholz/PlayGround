@@ -13,5 +13,6 @@ namespace PlayGround.ViewModels
 		}
 
 		public string Title => _cover.Title;
+        public string ImageUrl => _cover.Links.ImageLink.Href;
 	}
 }

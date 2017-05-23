@@ -6,6 +6,8 @@ using Android.Widget;
 using PlayGround.Contracts.ViewModels;
 using ReactiveUI;
 using ReactiveUI.Android.Support;
+using FFImageLoading;
+using FFImageLoading.Views;
 
 namespace PlayGround.UI.Droid.Adapters
 {
@@ -26,6 +28,7 @@ namespace PlayGround.UI.Droid.Adapters
 		{
 			private readonly CompositeDisposable _disposables;
 			private TextView TitleLabel { get; set; }
+            private ImageViewAsync ImageView { get; set; }
 
 			public CoversRecyclerViewHolder(View itemView)
 				: base(itemView)
@@ -36,6 +39,16 @@ namespace PlayGround.UI.Droid.Adapters
 				this.WhenAnyValue(x => x.ViewModel.Title)
 				    .SubscribeSafe(x => TitleLabel.Text = x)
 				    .DisposeWith(_disposables);
+
+                this.WhenAnyValue(x => x.ViewModel.ImageUrl)
+                    .SubscribeSafe(x => 
+                {
+                    ImageService
+                        .Instance
+                        .LoadUrl(x)
+                        .Into(ImageView);
+                })
+                    .DisposeWith(_disposables);
 			}
 
 			protected override void Dispose(bool disposing)
