@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -10,15 +11,14 @@ using ReactiveUI;
 
 namespace PlayGround.ViewModels
 {
-	public delegate ICoverViewModel CoverViewModelFactory(Cover cover, int index);
+	public delegate ICoverViewModel CoverViewModelFactory(Cover cover);
 
 	public class CoversViewModel : ReactiveObject, ICoversViewModel, ISupportsActivation
 	{
 		private readonly ILogger _logger;
 		private readonly ViewModelActivator _activator;
-		private readonly CoverViewModelFactory _coverViewModelFactory;
-
-		private ObservableAsPropertyHelper<ReactiveList<ICoverViewModel>> _coverViewModels;
+        private readonly CoverViewModelFactory _coverViewModelFactory;
+		private readonly IReactiveList<Cover> _covers;
 
 		public CoversViewModel(
 			ICoversRepository coversRepository,
@@ -27,14 +27,15 @@ namespace PlayGround.ViewModels
 			_logger = LoggerService.GetLogger(GetType());
 			_activator = new ViewModelActivator();
 			_coverViewModelFactory = coverViewModelFactory;
+            _covers = new ReactiveList<Cover>();
 
-			coversRepository
-				.GetCovers()
-				.Do(_ => _coverViewModels?.Value?.Clear())
-				.Iterate()
-				.Select((cover, index) => _coverViewModelFactory(cover, index))
-				.Scan(new ReactiveList<ICoverViewModel>(), (x, y) => { x.Add(y); return x; })
-				.ToProperty(this, x => x.CoverViewModels, out _coverViewModels);
+            coversRepository
+                .GetCovers()
+                .SubscribeSafe(x =>
+	            {
+	                _covers.Clear();
+	                _covers.AddRange(x);
+	            });
 
 			this.WhenActivated(disposables => {
 				using(_logger.Perf("Activation")) 
@@ -48,6 +49,7 @@ namespace PlayGround.ViewModels
 		}
 
 		public ViewModelActivator Activator => _activator;
-		public ReactiveList<ICoverViewModel> CoverViewModels => _coverViewModels.Value;
+		public IReactiveDerivedList<ICoverViewModel> CoverViewModels => 
+            _covers.CreateDerivedCollection(x => _coverViewModelFactory(x));
 	}
 }
