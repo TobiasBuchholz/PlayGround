@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -42,9 +43,15 @@ namespace PlayGround.ViewModels
                     firebaseService
                         .RootNode
                         .GetChild("colors")
-                        .ObserveValueChanged<Color>()
-						.DebugWriteLine()
+                        .ObserveValuesChanged<Color>()
+                        .DebugWriteLine()
                         .SubscribeSafe();
+
+                    firebaseService
+                        .RootNode
+                        .GetChild("colors")
+                        .CreateChildWithAutoId()
+                        .SetValue(new Color { HexValue = "#f0f0f0"});
 				}
 			});
 		}
