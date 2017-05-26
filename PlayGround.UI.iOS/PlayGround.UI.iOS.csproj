@@ -212,6 +212,8 @@
     <Compile Include="ControlFactory.cs" />
     <Compile Include="PreferredFont.cs" />
     <Compile Include="Resources.cs" />
+    <Compile Include="Views\CoverCell.cs" />
+    <Compile Include="Utility\CollectionViewCellBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\Base.lproj\Localizable.strings" />

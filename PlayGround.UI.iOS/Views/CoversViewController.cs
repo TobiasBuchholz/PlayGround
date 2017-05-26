@@ -13,27 +13,21 @@ namespace PlayGround.UI.iOS.Views
 	public class CoversViewController : ViewControllerBase<ICoversViewModel>
 	{
         private UIButton _backButton;
-        private UIImageView _imageView;
+        private UICollectionView _collectionView;
 
 		public CoversViewController()
 		{
 			View.BackgroundColor = UIColor.Green;
 
-			var logger = LoggerService.GetLogger(this.GetType());
+			var logger = LoggerService.GetLogger(GetType());
 
 			this.WhenActivated(disposables => {
 				using (logger.Perf("Activation")) 
 				{
-					this.WhenAnyValue(x => x.ViewModel.CoverViewModels)
-                        .WhereNotNull()
-                        .ObserveOn(RxApp.MainThreadScheduler)
-                        .SubscribeSafe(x => 
-                    {
-                        ImageService
-                            .Instance
-                            .LoadUrl(x[0].ImageUrl)
-                            .Into(_imageView);
-                    });
+                    this.WhenAnyValue(x => x.ViewModel.CoverViewModels)
+                        .Select(x => x == null ? null : new ReactiveCollectionViewSource<ICoverViewModel>(_collectionView, x, CoverCell.Key))
+                        .BindTo(_collectionView, x => x.Source)
+                        .DisposeWith(Disposables);
 				}
 			});
 		}
@@ -49,20 +43,26 @@ namespace PlayGround.UI.iOS.Views
 			_backButton.SetTitle("Back", UIControlState.Normal);
 			_backButton.TouchUpInside += (sender, e) => DismissViewController(true, null);
 
-            _imageView = ControlFactory
-                .CreateImage()
-                .DisposeWith(Disposables);
-            _imageView.BackgroundColor = UIColor.Orange;
+            _collectionView = new UICollectionView(View.Frame, CreateCollectionViewLayout());
+            _collectionView.RegisterClassForCell(typeof(CoverCell), CoverCell.Key);
 
 			View.ConstrainLayout(() =>
 				_backButton.CenterX() == View.CenterX() &&
-				_backButton.CenterY() == View.CenterY() &&
-				_imageView.Left() == View.Left() && 
-				_imageView.Right() == View.Right() && 
-				_imageView.Top() == View.Top() && 
-				_imageView.Bottom() == View.Bottom());
+				_backButton.CenterY() == View.CenterY() && 
+				_collectionView.Top() == View.Top() &&
+				_collectionView.Bottom() == View.Bottom() &&
+				_collectionView.Left() == View.Left() &&
+				_collectionView.Right() == View.Right());
 
-            View.AddSubviews(_imageView, _backButton);
+            View.AddSubviews(_collectionView, _backButton);
 		}
+
+        private UICollectionViewLayout CreateCollectionViewLayout()
+        {
+            var layout = new UICollectionViewFlowLayout();
+            layout.ScrollDirection = UICollectionViewScrollDirection.Vertical;
+            layout.ItemSize = new CoreGraphics.CGSize(170, 250);
+            return layout;
+        }
 	}
 }
