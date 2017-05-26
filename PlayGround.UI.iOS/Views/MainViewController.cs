@@ -1,9 +1,11 @@
 using System;
 using System.Reactive.Disposables;
+using CoreGraphics;
 using FFImageLoading;
 using FFImageLoading.Svg.Platform;
 using Genesis.Logging;
 using PlayGround.Contracts.ViewModels;
+using PlayGround.UI.iOS.Controls;
 using PlayGround.UI.iOS.Utility;
 using PlayGround.UI.iOS.Views;
 using ReactiveUI;
@@ -54,7 +56,14 @@ namespace PlayGround.UI.iOS
                 .WithCustomDataResolver(new SvgDataResolver(0, (int) View.Frame.Height, true))
                 .Into(imageView);
 
+            var iconView = new IconView();
+            iconView.Icon = IconRef.Close;
+            iconView.IconSize = 50;
+            iconView.TintColors = new UIColor[] { UIColor.Green, UIColor.Red };
+
 			View.ConstrainLayout(() =>
+                iconView.Top() == View.Top() + 40 && 
+                iconView.Right() == View.Right() - 20 && 
 				bottomLabel.Left() == View.Left() + Layout.StandardSuperviewSpacing &&
 				bottomLabel.Right() == View.Right() - Layout.StandardSuperviewSpacing &&
 				bottomLabel.Bottom() == View.Bottom() - Layout.StandardSuperviewSpacing &&
@@ -66,7 +75,7 @@ namespace PlayGround.UI.iOS
 				imageView.Top() == View.Top() + Layout.StandardSuperviewSpacing &&
 				imageView.Bottom() == aboveBottomLabel.Top());
 
-			View.AddSubviews(imageView, bottomLabel, aboveBottomLabel);
+            View.AddSubviews(imageView, bottomLabel, aboveBottomLabel, iconView);
 		}
 
 		public override void ViewDidLoad()

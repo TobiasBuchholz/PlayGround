@@ -179,6 +179,8 @@
     <Folder Include="Properties\" />
     <Folder Include="Utility\" />
     <Folder Include="Images\" />
+    <Folder Include="Controls\" />
+    <Folder Include="Icons\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\Base.lproj\Main.storyboard" />
@@ -214,10 +216,12 @@
     <Compile Include="Resources.cs" />
     <Compile Include="Views\CoverCell.cs" />
     <Compile Include="Utility\CollectionViewCellBase.cs" />
+    <Compile Include="Controls\IconView.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\Base.lproj\Localizable.strings" />
     <BundleResource Include="Images\sample.svg" />
+    <BundleResource Include="Icons\ic_clear_white_24px.svg" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PlayGround.Contracts\PlayGround.Contracts.csproj">

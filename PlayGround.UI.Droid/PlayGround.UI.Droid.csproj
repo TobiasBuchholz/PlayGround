@@ -163,6 +163,7 @@
     <Compile Include="AndroidCompositionRoute.cs" />
     <Compile Include="Views\CoversActivity.cs" />
     <Compile Include="Adapters\CoversRecyclerAdapter.cs" />
+    <Compile Include="Controls\IconView.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -179,6 +180,10 @@
     <AndroidResource Include="Resources\layout\layout_cover_item.axml" />
     <AndroidResource Include="Resources\layout\activity_covers.axml" />
     <AndroidResource Include="Resources\drawable\sample.svg" />
+    <AndroidResource Include="Resources\drawable\ic_clear_white_24px.svg" />
+    <AndroidResource Include="Resources\values\attrs.xml" />
+    <AndroidResource Include="Resources\color\icon_selector.xml" />
+    <AndroidResource Include="Resources\values\icons.xml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\mipmap-hdpi\" />
@@ -190,6 +195,8 @@
     <Folder Include="Resources\layout\" />
     <Folder Include="Views\" />
     <Folder Include="Adapters\" />
+    <Folder Include="Controls\" />
+    <Folder Include="Resources\color\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PlayGround.Contracts\PlayGround.Contracts.csproj">

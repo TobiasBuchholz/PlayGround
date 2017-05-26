@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <FFImageLoading.Views.ImageViewAsync
@@ -12,4 +13,11 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:text="Label" />
+    <PlayGround.UI.Droid.Controls.IconView
+        android:id="@+id/activity_main_icon_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:iv_icon="@string/icon_close"
+        app:iv_iconSize="50dp"
+        android:tint="@color/icon_selector" />
 </FrameLayout>

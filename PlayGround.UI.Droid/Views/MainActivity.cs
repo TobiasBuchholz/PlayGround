@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
+using Android.Graphics;
 using Android.OS;
 using Android.Widget;
 using FFImageLoading;
@@ -11,6 +12,7 @@ using FFImageLoading.Svg.Platform;
 using FFImageLoading.Views;
 using Genesis.Logging;
 using PlayGround.Contracts.ViewModels;
+using PlayGround.UI.Droid.Controls;
 using PlayGround.UI.Droid.Views;
 using ReactiveUI;
 
