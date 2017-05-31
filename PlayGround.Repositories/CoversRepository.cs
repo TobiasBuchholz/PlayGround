@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
@@ -15,7 +15,6 @@ namespace PlayGround.Repositories
 	{
 		private readonly IRealmProvider _realmProvider;
 		private readonly IApiServiceFactory _apiServiceFactory;
-		private readonly ISubject<IEnumerable<Cover>> _allSubject;
 
 		public CoversRepository(
 			IRealmProvider realmProvider,
@@ -23,9 +22,6 @@ namespace PlayGround.Repositories
 		{
 			_realmProvider = realmProvider;
 			_apiServiceFactory = apiServiceFactory;
-			_allSubject = new Subject<IEnumerable<Cover>>();
-
-			CreateCoversQueryable().SubscribeForNotifications((sender,_,__) => _allSubject.OnNext(sender));
 		}
 
 		private IOrderedQueryable<Cover> CreateCoversQueryable()
@@ -35,12 +31,15 @@ namespace PlayGround.Repositories
 				.OrderByDescending(x => x.PublishedAt);
 		}
 
-		public IObservable<IEnumerable<Cover>> GetCovers()
-		{
-			return _allSubject
-				.AsObservable()
-				.StartWith(CreateCoversQueryable());
-		}
+        public IObservable<IEnumerable<Cover>> GetCovers()
+        {
+			var subject = new Subject<IEnumerable<Cover>>();
+            var covers = CreateCoversQueryable();
+            covers.SubscribeForNotifications((sender,_,__) => subject.OnNext(sender));
+            return subject
+                .AsObservable()
+                .StartWith(covers);
+        }
 
 		public IObservable<Unit> UpdateCovers()
 		{

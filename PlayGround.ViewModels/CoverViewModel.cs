@@ -5,14 +5,16 @@ namespace PlayGround.ViewModels
 {
 	public class CoverViewModel : ReactiveObject, ICoverViewModel
 	{
-		private readonly Cover _cover;
+		private readonly string _title;
+        private readonly string _imageUrl;
 
 		public CoverViewModel(Cover cover)
 		{
-			_cover = cover;
+            _title = cover.Title;
+            _imageUrl = cover.Links.ImageLink.Href;
 		}
 
-		public string Title => _cover.Title;
-        public string ImageUrl => _cover.Links.ImageLink.Href;
+        public string Title => _title;
+        public string ImageUrl => _imageUrl;
 	}
 }

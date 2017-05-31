@@ -1,9 +1,8 @@
 using System;
 using System.Reactive.Disposables;
-using CoreGraphics;
+using System.Reactive.Linq;
 using FFImageLoading;
 using FFImageLoading.Svg.Platform;
-using Genesis.Logging;
 using PlayGround.Contracts.ViewModels;
 using PlayGround.UI.iOS.Controls;
 using PlayGround.UI.iOS.Utility;
@@ -18,15 +17,6 @@ namespace PlayGround.UI.iOS
         public MainViewController(IntPtr handle) 
 			: base(handle)
         {
-			var logger = LoggerService.GetLogger(this.GetType());
-
-			this.WhenActivated(disposables => {
-				using (logger.Perf("Activation")) 
-				{
-					this.OneWayBind(ViewModel, x => x.HelloWorldText, x => x.HelloWorldLabel.Text)
-					    .DisposeWith(disposables);
-				}
-			});
         }
 
 		public override void LoadView()
@@ -78,13 +68,19 @@ namespace PlayGround.UI.iOS
             View.AddSubviews(imageView, bottomLabel, aboveBottomLabel, iconView);
 		}
 
+        protected override void BindControls(CompositeDisposable disposables)
+        {
+            this.OneWayBind(ViewModel, x => x.HelloWorldText, x => x.HelloWorldLabel.Text)
+               .DisposeWith(disposables);
+        }
+
 		public override void ViewDidLoad()
 		{
 			base.ViewDidLoad();
 			InitViews();
 		}
 
-		private void InitViews()
+        private void InitViews()
 		{
 			View.BringSubviewToFront(HelloWorldLabel);
 			HelloWorldLabel.UserInteractionEnabled = true;

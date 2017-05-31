@@ -1,15 +1,46 @@
-﻿using UIKit;
+﻿using System;
+using System.Diagnostics;
+using System.Globalization;
+using Genesis.Logging;
+using UIKit;
 
 namespace PlayGround.UI.iOS
 {
 	public class Application
 	{
-		// This is the main entry point of the application.
-		static void Main(string[] args)
-		{
-			// if you want to use a different Application Delegate class from "AppDelegate"
-			// you can specify it here.
-			UIApplication.Main(args, null, "AppDelegate");
-		}
+        static void Main(string[] args)
+        {
+            ConfigureAmbientLoggerService();
+            DirectLoggingOutputToConsole();
+
+            UIApplication.Main(args, null, "AppDelegate");
+        }
+
+        [Conditional("LOGGING")]
+        private static void ConfigureAmbientLoggerService() 
+        {
+            LoggerService.Current = new DefaultLoggerService();
+        }
+
+        [Conditional("LOGGING")]
+        private static void DirectLoggingOutputToConsole() 
+        {
+            LoggerService
+                .Current
+                .Entries
+                .SubscribeSafe(
+                    entry =>
+            {
+                Console.Out.Write(entry.Timestamp.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss.fff", CultureInfo.InvariantCulture));
+                Console.Out.Write(" [");
+                Console.Out.Write(entry.Level.ToString());
+                Console.Out.Write("] #");
+                Console.Out.Write(entry.ThreadId);
+                Console.Out.Write(" ");
+                Console.Out.Write(entry.Name);
+                Console.Out.Write(" : ");
+                Console.Out.WriteLine(entry.Message);
+            }); 
+        }
 	}
 }

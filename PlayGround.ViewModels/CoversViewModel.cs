@@ -18,7 +18,8 @@ namespace PlayGround.ViewModels
 		private readonly ILogger _logger;
 		private readonly ViewModelActivator _activator;
         private readonly CoverViewModelFactory _coverViewModelFactory;
-		private readonly IReactiveList<Cover> _covers;
+        private readonly ICoversRepository _coversRepository;
+        private readonly ReactiveList<ICoverViewModel> _coversViewModels;
 
 		public CoversViewModel(
 			ICoversRepository coversRepository,
@@ -26,30 +27,51 @@ namespace PlayGround.ViewModels
 		{
 			_logger = LoggerService.GetLogger(GetType());
 			_activator = new ViewModelActivator();
-			_coverViewModelFactory = coverViewModelFactory;
-            _covers = new ReactiveList<Cover>();
+            _coverViewModelFactory = coverViewModelFactory;
+			_coversRepository = coversRepository;
+            _coversViewModels = new ReactiveList<ICoverViewModel>(); 
 
-            coversRepository
-                .GetCovers()
-                .SubscribeSafe(x =>
+            this.WhenActivated(disposables => {
+				using(_logger.Perf("Activation"))
+                {
+                    InitProperiesDeferred(disposables);
+                }
+            });
+        }
+
+        private void InitProperiesDeferred(CompositeDisposable disposables)
+        {
+            Observable
+                .Defer(() => 
 	            {
-	                _covers.Clear();
-	                _covers.AddRange(x);
-	            });
+	                InitProperties(disposables);
+	                return Observables.Unit;
+	            })
+                .SubscribeOn(RxApp.TaskpoolScheduler)
+                .SubscribeSafe();
+        }
 
-			this.WhenActivated(disposables => {
-				using(_logger.Perf("Activation")) 
-				{
-					coversRepository
-						.UpdateCovers()
-						.SubscribeSafe()
-						.DisposeWith(disposables);
-				}
-			});
-		}
+        private void InitProperties(CompositeDisposable disposables)
+        {
+            _coversRepository
+	            .GetCovers()
+                .Select(covers => covers.Select(x => _coverViewModelFactory(x)).ToList())
+				.ObserveOn(RxApp.MainThreadScheduler)
+                .SubscribeSafe(x => 
+                {
+	                _coversViewModels.Clear();
+	                _coversViewModels.AddRange(x);
+                })
+                .DisposeWith(disposables);
 
-		public ViewModelActivator Activator => _activator;
-		public IReactiveDerivedList<ICoverViewModel> CoverViewModels => 
-            _covers.CreateDerivedCollection(x => _coverViewModelFactory(x));
+            _coversRepository
+                .UpdateCovers()
+                .SubscribeSafe()
+                .DisposeWith(disposables);
+        }
+
+        public ViewModelActivator Activator => _activator;
+		public ReactiveList<ICoverViewModel> CoverViewModels => _coversViewModels;
+
 	}
 }

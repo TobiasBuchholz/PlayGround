@@ -4,6 +4,6 @@ namespace PlayGround.Contracts.ViewModels
 {
 	public interface ICoversViewModel
 	{
-		IReactiveDerivedList<ICoverViewModel> CoverViewModels { get; }
+		ReactiveList<ICoverViewModel> CoverViewModels { get; }
 	}
 }

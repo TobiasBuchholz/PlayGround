@@ -1,7 +1,6 @@
 using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using FFImageLoading;
 using Genesis.Logging;
 using PlayGround.Contracts.ViewModels;
 using PlayGround.UI.iOS.Utility;
@@ -17,19 +16,6 @@ namespace PlayGround.UI.iOS.Views
 
 		public CoversViewController()
 		{
-			View.BackgroundColor = UIColor.Green;
-
-			var logger = LoggerService.GetLogger(GetType());
-
-			this.WhenActivated(disposables => {
-				using (logger.Perf("Activation")) 
-				{
-                    this.WhenAnyValue(x => x.ViewModel.CoverViewModels)
-                        .Select(x => x == null ? null : new ReactiveCollectionViewSource<ICoverViewModel>(_collectionView, x, CoverCell.Key))
-                        .BindTo(_collectionView, x => x.Source)
-                        .DisposeWith(Disposables);
-				}
-			});
 		}
 
 		public override void LoadView()
@@ -56,6 +42,14 @@ namespace PlayGround.UI.iOS.Views
 
             View.AddSubviews(_collectionView, _backButton);
 		}
+
+        protected override void BindControls(CompositeDisposable disposables)
+        {
+            this.WhenAnyValue(x => x.ViewModel.CoverViewModels)
+                .Select(x => x == null ? null : new ReactiveCollectionViewSource<ICoverViewModel>(_collectionView, x, CoverCell.Key))
+                .BindTo(_collectionView, x => x.Source)
+                .DisposeWith(disposables);
+        }
 
         private UICollectionViewLayout CreateCollectionViewLayout()
         {

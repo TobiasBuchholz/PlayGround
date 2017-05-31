@@ -1,51 +1,82 @@
+using System;
+using System.Reactive;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
+using ReactiveUI;
+using Splat;
+
 namespace PlayGround.UI.iOS.Utility
 {
-	using System;
-	using System.Reactive.Disposables;
-	using ReactiveUI;
-	using Splat;
-
-	// a base class for view controllers to save repetitive code
 	public abstract class ViewControllerBase<TViewModel> : ReactiveViewController, IViewFor<TViewModel>
         where TViewModel : class
     {
-        private readonly CompositeDisposable disposables;
-        private TViewModel viewModel;
+        private TViewModel _viewModel;
+        private CompositeDisposable _disposables;
+        private ISubject<CompositeDisposable> _activated;
 
 		protected ViewControllerBase(IntPtr handle) 
 			: base(handle)
 		{
-			this.disposables = new CompositeDisposable();
-			ViewModel = Locator.Current.GetService<TViewModel>();
+            Initialize();
 		}
 
         protected ViewControllerBase()
         {
-            this.disposables = new CompositeDisposable();
-			ViewModel = Locator.Current.GetService<TViewModel>();
+            Initialize();
         }
+
+        private void Initialize()
+        {
+            _disposables = new CompositeDisposable();
+            _activated = new Subject<CompositeDisposable>();
+            this.WhenActivated(_activated.OnNext);
+
+            _activated
+                .CombineLatest(CreateViewModelDeferred(), (disposables,_) => disposables)
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Do(x => BindControls(x))
+                .SubscribeSafe()
+                .DisposeWith(_disposables);
+        }
+
+        private IObservable<Unit> CreateViewModelDeferred()
+        {
+            return Observable
+                    .Defer(() =>
+                    {
+                        ViewModel = CreateViewModel();
+                        return Observables.Unit;
+                    })
+                .SubscribeOn(RxApp.TaskpoolScheduler);
+        }
+
+        protected virtual TViewModel CreateViewModel()
+        {
+            return Locator.Current.GetService<TViewModel>();
+        }
+
+        protected abstract void BindControls(CompositeDisposable disposables);
 
         public TViewModel ViewModel
         {
-            get { return this.viewModel; }
-            set { this.RaiseAndSetIfChanged(ref this.viewModel, value); }
+            get { return _viewModel; }
+            set { this.RaiseAndSetIfChanged(ref _viewModel, value); }
         }
 
         object IViewFor.ViewModel
         {
-            get { return this.ViewModel; }
-            set { this.ViewModel = (TViewModel)value; }
+            get { return ViewModel; }
+            set { ViewModel = (TViewModel)value; }
         }
 
-        protected CompositeDisposable Disposables => this.disposables;
+        protected CompositeDisposable Disposables => _disposables;
 
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
-
-            if (disposing)
-            {
-                this.disposables.Dispose();
+            if (disposing) {
+                _disposables.Dispose();
             }
         }
     }

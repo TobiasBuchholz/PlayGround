@@ -42,8 +42,6 @@ namespace PlayGround.UI
 
 		protected T LoggedCreation<T>(Func<T> factory)
 		{
-			logger.Debug("Instance of {0} requested.", typeof(T).FullName);
-
 			using (logger.Perf("Create {0}.", typeof(T).FullName)) {
 				return factory();
 			}
