@@ -2,8 +2,7 @@
 
 namespace PlayGround.Contracts.ViewModels
 {
-	public interface IMainViewModel : IDisposable
+	public interface IMainViewModel
 	{
-		string HelloWorldText { get; }
 	}
 }

@@ -1,9 +1,10 @@
-﻿using System;
+﻿﻿using System;
 using System.Reactive.Concurrency;
 using System.Threading;
 using Genesis.Logging;
 using PlayGround.Contracts.Services.HelloWorld;
 using PlayGround.Contracts.ViewModels;
+using PlayGround.Models;
 using PlayGround.Services.HelloWorld;
 using PlayGround.ViewModels;
 
@@ -24,6 +25,8 @@ namespace PlayGround.UI
 			backgroundScheduler = new Lazy<IScheduler>(CreateBackgroundScheduler);
 			mainScheduler = new Lazy<IScheduler>(CreateMainScheduler);
 			helloWorldService = new Lazy<IHelloWorldService>(CreateHelloWorldService);
+
+            new HelloWorldModel(); // throws System.InvalidOperationException otherwise because of linker strips away stuff
 		}
 
 		private IScheduler CreateBackgroundScheduler() 
@@ -52,7 +55,7 @@ namespace PlayGround.UI
 
 		public IMainViewModel ResolveMainViewModel()
 		{
-			return LoggedCreation(() => new MainViewModel(helloWorldService.Value));
+			return LoggedCreation(() => new MainViewModel());
 		}
 
 		public IHelloWorldService ResolveHelloWorldService()

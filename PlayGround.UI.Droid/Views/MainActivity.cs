@@ -26,7 +26,6 @@ namespace PlayGround.UI.Droid
 
 		private void BindViewsToViewModel()
 		{
-			this.OneWayBind(ViewModel, x => x.HelloWorldText, x => x.helloWorldLabel.Text);
 		}
 	}
 }

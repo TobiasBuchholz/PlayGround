@@ -25,7 +25,6 @@ namespace PlayGround.UI.iOS
 
 		private void BindViewsToViewModel()
 		{
-			this.OneWayBind(ViewModel, x => x.HelloWorldText, x => x.HelloWorldLabel.Text);
 		}
     }
 }
