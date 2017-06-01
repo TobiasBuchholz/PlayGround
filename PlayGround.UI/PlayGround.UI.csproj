@@ -83,13 +83,13 @@
       <HintPath>..\packages\Genesis.Ensure.1.0.5\lib\netstandard1.0\Genesis.Ensure.dll</HintPath>
     </Reference>
     <Reference Include="Realm.DataBinding">
-      <HintPath>..\packages\Realm.DataBinding.1.0.0\lib\portable-net45+sl5+wp8+wpa81+win8+monoandroid+Xamarin.iOS10+monotouch+Xamarin.Mac\Realm.DataBinding.dll</HintPath>
+      <HintPath>..\packages\Realm.DataBinding.1.1.0\lib\netstandard1.0\Realm.DataBinding.dll</HintPath>
     </Reference>
     <Reference Include="Realm">
-      <HintPath>..\packages\Realm.Database.1.2.0\lib\portable-net45+sl5+wp8+wpa81+win8+monoandroid+Xamarin.iOS10+monotouch+Xamarin.Mac\Realm.dll</HintPath>
+      <HintPath>..\packages\Realm.Database.1.4.0\lib\portable-net45+sl5+wp8+wpa81+win8+monoandroid+Xamarin.iOS10+monotouch+Xamarin.Mac\Realm.dll</HintPath>
     </Reference>
     <Reference Include="Realm.Sync">
-      <HintPath>..\packages\Realm.1.2.0\lib\portable-net45+sl5+wp8+wpa81+win8+monoandroid+Xamarin.iOS10+monotouch+Xamarin.Mac\Realm.Sync.dll</HintPath>
+      <HintPath>..\packages\Realm.1.4.0\lib\portable-net45+sl5+wp8+wpa81+win8+monoandroid+Xamarin.iOS10+monotouch+Xamarin.Mac\Realm.Sync.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -97,7 +97,7 @@
     <None Include="FodyWeavers.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
-  <Import Project="..\packages\Fody.1.29.4\build\portable-net+sl+win+wpa+wp\Fody.targets" Condition="Exists('..\packages\Fody.1.29.4\build\portable-net+sl+win+wpa+wp\Fody.targets')" />
-  <Import Project="..\packages\Realm.Database.1.2.0\build\Realm.Database.targets" Condition="Exists('..\packages\Realm.Database.1.2.0\build\Realm.Database.targets')" />
-  <Import Project="..\packages\Realm.1.2.0\build\Realm.targets" Condition="Exists('..\packages\Realm.1.2.0\build\Realm.targets')" />
+  <Import Project="..\packages\Fody.2.0.10\build\portable-net+sl+win+wpa+wp\Fody.targets" Condition="Exists('..\packages\Fody.2.0.10\build\portable-net+sl+win+wpa+wp\Fody.targets')" />
+  <Import Project="..\packages\Realm.Database.1.4.0\build\Realm.Database.targets" Condition="Exists('..\packages\Realm.Database.1.4.0\build\Realm.Database.targets')" />
+  <Import Project="..\packages\Realm.1.4.0\build\Realm.targets" Condition="Exists('..\packages\Realm.1.4.0\build\Realm.targets')" />
 </Project>
