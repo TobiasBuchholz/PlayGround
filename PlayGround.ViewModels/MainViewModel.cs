@@ -2,7 +2,6 @@
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using Genesis.Logging;
 using PlayGround.Contracts.Services.HelloWorld;
 using PlayGround.Contracts.ViewModels;
 using PlayGround.Models;
@@ -10,52 +9,36 @@ using ReactiveUI;
 
 namespace PlayGround.ViewModels
 {
-	public class MainViewModel : ReactiveObject, IMainViewModel, ISupportsActivation
+	public class MainViewModel : ViewModelBase, IMainViewModel
 	{
-		private readonly ILogger logger;
-		private readonly ViewModelActivator activator;
-		private readonly IHelloWorldService helloWorldService;
+        private readonly IHelloWorldService _helloWorldService;
 
-		private ObservableAsPropertyHelper<string> helloWorldText;
-		private ReactiveCommandBase<Unit, HelloWorldModel> loadHelloWorld;
+        private ObservableAsPropertyHelper<string> _helloWorldText;
+        private ReactiveCommandBase<Unit, HelloWorldModel> _loadHelloWorld;
 
 		public MainViewModel(IHelloWorldService helloWorldService)
 		{
-			this.logger = LoggerService.GetLogger(this.GetType());
-			this.activator = new ViewModelActivator();
-			this.helloWorldService = helloWorldService;
+			_helloWorldService = helloWorldService;
 
-			InitCommands();
-			InitProperties();
+            _loadHelloWorld = ReactiveCommand
+                .CreateFromObservable(() => _helloWorldService.GetHelloWorld())
+                .LogThrownExceptions(Disposables)
+                .DisposeWith(Disposables);
 
-			this.WhenActivated(disposables => {
-				using (this.logger.Perf("Activation")) 
-				{
-					loadHelloWorld
-						.Execute()
-						.SubscribeSafe()
-						.DisposeWith(disposables);	
-				}
-			});
+            _loadHelloWorld
+                .Execute()
+                .SubscribeSafe()
+                .DisposeWith(Disposables);
 		}
 
-		private void InitCommands()
-		{
-			loadHelloWorld = ReactiveCommand
-				.CreateFromObservable(() => helloWorldService.GetHelloWorld())
-				.LogThrownExceptions();
-		}
+        protected override void InitLifeCycleAwareProperties(CompositeDisposable lifeCycleDisposable)
+        {
+            this.WhenAnyObservable(x => x._loadHelloWorld)
+                .Select(x => x.Name)
+                .ToProperty(this, x => x.HelloWorldText, out _helloWorldText)
+                .DisposeWith(lifeCycleDisposable);
+        }
 
-		private void InitProperties()
-		{
-			this.WhenAnyObservable(x => x.loadHelloWorld)
-			    .Select(x => x.Name)
-			    .ToProperty(this, x => x.HelloWorldText, out helloWorldText);
-		}
-
-		#region properties
-		public ViewModelActivator Activator => activator;
-		public string HelloWorldText => helloWorldText.Value;
- 		#endregion
+        public string HelloWorldText => _helloWorldText.Value;
 	}
 }

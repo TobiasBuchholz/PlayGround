@@ -1,9 +1,10 @@
-﻿using PlayGround.Contracts.ViewModels;
+﻿using System;
+using System.Reactive.Disposables;
+using PlayGround.Contracts.ViewModels;
 using PlayGround.Models;
-using ReactiveUI;
 namespace PlayGround.ViewModels
 {
-	public class CoverViewModel : ReactiveObject, ICoverViewModel
+    public class CoverViewModel : ViewModelBase, ICoverViewModel
 	{
 		private readonly string _title;
         private readonly string _imageUrl;
@@ -16,5 +17,9 @@ namespace PlayGround.ViewModels
 
         public string Title => _title;
         public string ImageUrl => _imageUrl;
-	}
+
+        protected override void InitLifeCycleAwareProperties(CompositeDisposable lifeCycleDisposable)
+        {
+        }
+    }
 }

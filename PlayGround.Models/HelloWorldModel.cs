@@ -3,9 +3,13 @@ namespace PlayGround.Models
 {
 	public class HelloWorldModel : RealmObject
 	{
-		public HelloWorldModel()
+        public HelloWorldModel()
+        {
+        }
+
+		public HelloWorldModel(long tick)
 		{
-			Name = "Hello world!";
+			Name = "Hello world! " + tick;
 		}
 
 		[PrimaryKey]

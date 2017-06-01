@@ -71,20 +71,13 @@ namespace System.Reactive.Linq
 			return source.Execute(param).SubscribeSafe().DisposeWith(disposable);
 		}
 
-		public static ReactiveCommandBase<TParam, TResult> LogThrownExceptions<TParam, TResult>(this ReactiveCommandBase<TParam, TResult> command)
-		{
-			command
-				.ThrownExceptions
-				.SubscribeSafe(LogException);
-			return command;
-		}
-
-		public static void LogThrownExceptions<TParam, TResult>(this ReactiveCommandBase<TParam, TResult> command, CompositeDisposable disposable)
+        public static ReactiveCommandBase<TParam, TResult> LogThrownExceptions<TParam, TResult>(this ReactiveCommandBase<TParam, TResult> command, CompositeDisposable disposables)
 		{
 			command
 				.ThrownExceptions
 				.SubscribeSafe(LogException)
-				.DisposeWith(disposable);
+                .DisposeWith(disposables);
+			return command;
 		}
 
 		public static void LogThrownExceptions<T>(this ObservableAsPropertyHelper<T> propertyHelper, CompositeDisposable disposable)

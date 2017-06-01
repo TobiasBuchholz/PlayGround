@@ -1,6 +1,8 @@
-﻿namespace PlayGround.Contracts.ViewModels
+﻿using System;
+
+namespace PlayGround.Contracts.ViewModels
 {
-	public interface IMainViewModel
+	public interface IMainViewModel : IDisposable
 	{
 		string HelloWorldText { get; }
 	}

@@ -1,7 +1,5 @@
-using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using Genesis.Logging;
 using PlayGround.Contracts.ViewModels;
 using PlayGround.UI.iOS.Utility;
 using ReactiveUI;
@@ -46,7 +44,8 @@ namespace PlayGround.UI.iOS.Views
         protected override void BindControls(CompositeDisposable disposables)
         {
             this.WhenAnyValue(x => x.ViewModel.CoverViewModels)
-                .Select(x => x == null ? null : new ReactiveCollectionViewSource<ICoverViewModel>(_collectionView, x, CoverCell.Key))
+                .WhereNotNull()
+                .Select(x => new ReactiveCollectionViewSource<ICoverViewModel>(_collectionView, x, CoverCell.Key))
                 .BindTo(_collectionView, x => x.Source)
                 .DisposeWith(disposables);
         }

@@ -35,6 +35,7 @@
     <Compile Include="MainViewModel.cs" />
     <Compile Include="CoversViewModel.cs" />
     <Compile Include="CoverViewModel.cs" />
+    <Compile Include="ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PlayGround.Contracts\PlayGround.Contracts.csproj">

@@ -9,7 +9,7 @@ using Splat;
 namespace PlayGround.UI.iOS.Utility
 {
 	public abstract class ViewControllerBase<TViewModel> : ReactiveViewController, IViewFor<TViewModel>
-        where TViewModel : class
+        where TViewModel : class, IDisposable
     {
         private TViewModel _viewModel;
         private CompositeDisposable _disposables;
@@ -43,20 +43,13 @@ namespace PlayGround.UI.iOS.Utility
         private IObservable<Unit> CreateViewModelDeferred()
         {
             return Observable
-                    .Defer(() =>
-                    {
-                        ViewModel = CreateViewModel();
-                        return Observables.Unit;
-                    })
+                .Defer(() => { ViewModel = CreateViewModel(); return Observables.Unit; })
                 .SubscribeOn(RxApp.TaskpoolScheduler);
         }
 
-        protected virtual TViewModel CreateViewModel()
-        {
-            return Locator.Current.GetService<TViewModel>();
-        }
-
+        protected virtual TViewModel CreateViewModel() => Locator.Current.GetService<TViewModel>();
         protected abstract void BindControls(CompositeDisposable disposables);
+        protected CompositeDisposable Disposables => _disposables;
 
         public TViewModel ViewModel
         {
@@ -70,14 +63,11 @@ namespace PlayGround.UI.iOS.Utility
             set { ViewModel = (TViewModel)value; }
         }
 
-        protected CompositeDisposable Disposables => _disposables;
-
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
-            if (disposing) {
-                _disposables.Dispose();
-            }
+            _disposables.Dispose();
+            ViewModel.Dispose();
         }
     }
 }

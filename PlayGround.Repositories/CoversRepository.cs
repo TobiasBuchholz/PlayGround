@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿﻿﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
@@ -7,6 +7,7 @@ using System.Reactive.Subjects;
 using PlayGround.Contracts.Repositories;
 using PlayGround.Contracts.Services.ServerApi;
 using PlayGround.Models;
+using ReactiveUI;
 using Realms;
 
 namespace PlayGround.Repositories
@@ -15,6 +16,7 @@ namespace PlayGround.Repositories
 	{
 		private readonly IRealmProvider _realmProvider;
 		private readonly IApiServiceFactory _apiServiceFactory;
+        private readonly ISubject<IEnumerable<ThreadSafeReference.Object<Cover>>> _allCovers;
 
 		public CoversRepository(
 			IRealmProvider realmProvider,
@@ -22,23 +24,43 @@ namespace PlayGround.Repositories
 		{
 			_realmProvider = realmProvider;
 			_apiServiceFactory = apiServiceFactory;
+            _allCovers = new Subject<IEnumerable<ThreadSafeReference.Object<Cover>>>();
+
+            CreateCoversQueryable()
+                .SubscribeForNotifications((sender,_,__) => _allCovers.OnNext(sender.Select(x => ThreadSafeReference.Create(x)).ToList()));
 		}
 
 		private IOrderedQueryable<Cover> CreateCoversQueryable()
 		{
-			return _realmProvider.GetRealm()
+			return _realmProvider
+                .GetRealm()
 				.All<Cover>()
 				.OrderByDescending(x => x.PublishedAt);
 		}
 
         public IObservable<IEnumerable<Cover>> GetCovers()
         {
-			var subject = new Subject<IEnumerable<Cover>>();
-            var covers = CreateCoversQueryable();
-            covers.SubscribeForNotifications((sender,_,__) => subject.OnNext(sender));
-            return subject
+            return _allCovers
                 .AsObservable()
-                .StartWith(covers);
+                .ObserveOn(RxApp.TaskpoolScheduler)
+                .Select(references => references.Select(x => _realmProvider.GetRealm().ResolveReference(x)))
+                .StartWith(CreateCoversQueryable());
+
+            // the following is actually a bit more straight forward implementation, 
+            // but does not work since SubscribeForNotifications won't get invoked 
+            // constantly for some reason
+
+			//var subject = new Subject<IEnumerable<Cover>>();
+            //var covers = CreateCoversQueryable();
+            //var token = covers.SubscribeForNotifications((sender,_,__) => {
+            //    subject.OnNext(sender);
+            //    System.Diagnostics.Debug.WriteLine("FU");
+            //});
+
+            //return subject
+                //.AsObservable()
+                //.StartWith(covers)
+                //.Finally(token.Dispose);
         }
 
 		public IObservable<Unit> UpdateCovers()
@@ -49,7 +71,7 @@ namespace PlayGround.Repositories
 				.Do(x => 
 				{
 					var realm = _realmProvider.GetRealm();
-					realm.Write(() => realm.Add(x, update:true));
+                    realm.Write(() => realm.Add(x, update:true));
 				})
 				.ToSignal();
 		}
