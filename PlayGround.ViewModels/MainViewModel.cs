@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using PlayGround.Contracts.ViewModels;
@@ -11,15 +12,20 @@ using Realms;
 
 namespace PlayGround.ViewModels
 {
-	public class MainViewModel : ReactiveObject, IMainViewModel
+    public class MainViewModel : ReactiveObject, IMainViewModel, IDisposable
 	{
+        private readonly CompositeDisposable _disposables;
+
 		public MainViewModel()
         {
+            _disposables = new CompositeDisposable();
+
             Debug.WriteLine($"subscribe for notifications on UI thread");
             Realm
                 .GetInstance()
                 .All<HelloWorldModel>()
-                .SubscribeForNotifications((collection, _, __) => Debug.WriteLine($"SubscribeForNotifications called on UI thread: count = {collection.Count}"));
+                .SubscribeForNotifications((collection, _, __) => Debug.WriteLine($"SubscribeForNotifications called on UI thread: count = {collection.Count}"))
+                .DisposeWith(_disposables);
 
             Observable
                 .Defer(() =>
@@ -28,12 +34,14 @@ namespace PlayGround.ViewModels
 	                Realm
 	                    .GetInstance()
 	                    .All<HelloWorldModel>()
-	                    .SubscribeForNotifications((collection, _, __) => Debug.WriteLine($"SubscribeForNotifications called on worker thread: count = {collection.Count}"));
+	                    .SubscribeForNotifications((collection, _, __) => Debug.WriteLine($"SubscribeForNotifications called on worker thread: count = {collection.Count}"))
+                        .DisposeWith(_disposables);
 
-	                return Observable.Return(Unit.Default);
+                    return Observable.Return(Unit.Default);
 	            })
                 .SubscribeOn(RxApp.TaskpoolScheduler)
-                .SubscribeSafe();
+                .SubscribeSafe()
+                .DisposeWith(_disposables);
 
             Observable
                 .Defer(async () =>
@@ -52,7 +60,13 @@ namespace PlayGround.ViewModels
 	                return Observable.Return(Unit.Default);
 	            })
                 .SubscribeOn(RxApp.TaskpoolScheduler)
-                .SubscribeSafe();
+                .SubscribeSafe()
+                .DisposeWith(_disposables);
         }
-	}
+
+        public void Dispose()
+        {
+            _disposables.Dispose();
+        }
+    }
 }
