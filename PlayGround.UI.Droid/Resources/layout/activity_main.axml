@@ -6,7 +6,8 @@
     <FFImageLoading.Views.ImageViewAsync
         android:id="@+id/activity_main_image_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:visibility="gone" />
     <TextView
         android:id="@+id/activity_main_hello_world_label"
         android:layout_width="match_parent"
@@ -20,4 +21,11 @@
         app:iv_icon="@string/icon_close"
         app:iv_iconSize="50dp"
         android:tint="@color/icon_selector" />
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animation_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:lottie_fileName="newspaper.json"
+        app:lottie_loop="true"
+        app:lottie_autoPlay="true" />
 </FrameLayout>

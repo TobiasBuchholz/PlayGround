@@ -1,6 +1,7 @@
 using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using Airbnb.Lottie;
 using FFImageLoading;
 using FFImageLoading.Svg.Platform;
 using PlayGround.Contracts.ViewModels;
@@ -51,6 +52,13 @@ namespace PlayGround.UI.iOS
             iconView.IconSize = 50;
             iconView.TintColors = new UIColor[] { UIColor.Green, UIColor.Red };
 
+            var animationView = LOTAnimationView.AnimationNamed("newspaper");
+            animationView.LoopAnimation = true;
+            animationView.ContentMode = UIViewContentMode.ScaleAspectFill;
+            animationView.PlayWithCompletion((animationFinished) => {
+                // Do Something
+            });
+
 			View.ConstrainLayout(() =>
                 iconView.Top() == View.Top() + 40 && 
                 iconView.Right() == View.Right() - 20 && 
@@ -63,9 +71,13 @@ namespace PlayGround.UI.iOS
 				imageView.Left() == View.Left() + Layout.StandardSuperviewSpacing &&
 				imageView.Right() == View.Right() - Layout.StandardSuperviewSpacing &&
 				imageView.Top() == View.Top() + Layout.StandardSuperviewSpacing &&
-				imageView.Bottom() == aboveBottomLabel.Top());
+				imageView.Bottom() == aboveBottomLabel.Top() &&
+                                 animationView.Left() == View.Left() &&
+                                 animationView.Right() == View.Right() &&
+                                 animationView.Top() == View.Top() &&
+                                 animationView.Bottom() == View.Bottom());
 
-            View.AddSubviews(imageView, bottomLabel, aboveBottomLabel, iconView);
+            View.AddSubviews(imageView, bottomLabel, aboveBottomLabel, iconView, animationView);
 		}
 
         protected override void BindControls(CompositeDisposable disposables)
