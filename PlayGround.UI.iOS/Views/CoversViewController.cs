@@ -4,12 +4,14 @@ using PlayGround.Contracts.ViewModels;
 using PlayGround.UI.iOS.Utility;
 using ReactiveUI;
 using UIKit;
+using Xamarin.Forms;
 
 namespace PlayGround.UI.iOS.Views
 {
 	public class CoversViewController : ViewControllerBase<ICoversViewModel>
 	{
         private UIButton _backButton;
+        private UIButton _detailsButton;
         private UICollectionView _collectionView;
 
 		public CoversViewController()
@@ -25,7 +27,17 @@ namespace PlayGround.UI.iOS.Views
 				.DisposeWith(Disposables);
 
 			_backButton.SetTitle("Back", UIControlState.Normal);
-			_backButton.TouchUpInside += (sender, e) => DismissViewController(true, null);
+			_backButton.TouchUpInside += (_,__) => DismissViewController(true, null);
+
+            _detailsButton = ControlFactory
+                .CreateButton()
+                .DisposeWith(Disposables);
+
+            _detailsButton.SetTitle("Details", UIControlState.Normal);
+            _detailsButton.TouchUpInside += (_,__) => {
+                var page = new DetailsPage();
+                PresentViewController(page.CreateViewController(), true, null);
+            };
 
             _collectionView = new UICollectionView(View.Frame, CreateCollectionViewLayout());
             _collectionView.RegisterClassForCell(typeof(CoverCell), CoverCell.Key);
@@ -33,12 +45,14 @@ namespace PlayGround.UI.iOS.Views
 			View.ConstrainLayout(() =>
 				_backButton.CenterX() == View.CenterX() &&
 				_backButton.CenterY() == View.CenterY() && 
+                _detailsButton.CenterX() == View.CenterX() &&
+                _detailsButton.CenterY() == _backButton.Bottom() &&
 				_collectionView.Top() == View.Top() &&
 				_collectionView.Bottom() == View.Bottom() &&
 				_collectionView.Left() == View.Left() &&
 				_collectionView.Right() == View.Right());
 
-            View.AddSubviews(_collectionView, _backButton);
+            View.AddSubviews(_collectionView, _backButton, _detailsButton);
 		}
 
         protected override void BindControls(CompositeDisposable disposables)

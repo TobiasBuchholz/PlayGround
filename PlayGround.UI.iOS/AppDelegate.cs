@@ -1,6 +1,7 @@
 ﻿using Foundation;
 using Splat;
 using UIKit;
+using Xamarin.Forms;
 
 namespace PlayGround.UI.iOS
 {
@@ -20,6 +21,7 @@ namespace PlayGround.UI.iOS
 		{
 			this.InitializeCompositionRoot();
 			this.InitializeControlFactory();
+            Forms.Init();
 
 			new SplatRegistrar().Register(Locator.CurrentMutable, new iOSCompositionRoot());
 			return true;
