@@ -101,9 +101,6 @@
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.IO.Compression" />
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\netstandard1.3\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="Genesis.Logging">
       <HintPath>..\packages\Genesis.Logging.1.0.7-alpha\lib\portable-net45+win8+wp8+wpa81\Genesis.Logging.dll</HintPath>
     </Reference>
@@ -167,6 +164,9 @@
     <Reference Include="Realm.Sync">
       <HintPath>..\packages\Realm.1.4.0\lib\netstandard1.4\Realm.Sync.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\netstandard1.3\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
@@ -181,6 +181,7 @@
     <Folder Include="Images\" />
     <Folder Include="Controls\" />
     <Folder Include="Icons\" />
+    <Folder Include="System\" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\Base.lproj\Main.storyboard" />
@@ -217,6 +218,10 @@
     <Compile Include="Views\CoverCell.cs" />
     <Compile Include="Utility\CollectionViewCellBase.cs" />
     <Compile Include="Controls\IconView.cs" />
+    <Compile Include="Views\DetailViewController.cs" />
+    <Compile Include="Utility\ICanDisposeGlobals.cs" />
+    <Compile Include="System\Collections\Generic\DisposeGlobalsExtension.cs" />
+    <Compile Include="System\StringExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\Base.lproj\Localizable.strings" />

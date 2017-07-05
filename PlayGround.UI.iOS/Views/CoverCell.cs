@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using FFImageLoading;
 using Foundation;
 using PlayGround.Contracts.ViewModels;
@@ -41,6 +42,17 @@ namespace PlayGround.UI.iOS.Views
 
         protected override void CreateBindings()
         {
+            System.Diagnostics.Debug.WriteLine("Create Bindings " + ViewModel);
+
+            this.WhenActivated(disposables => 
+            {
+                this.WhenAnyObservable(x => x.ViewModel.TestCounter)
+                .Where(_ => ViewModel.Title.Equals("Design Patterns CD"))
+                .Debug(x => $"{ViewModel.Title} -> counter: {x}")
+                .SubscribeSafe()
+                .DisposeWith(disposables);                
+            });
+
             this.WhenAnyValue(x => x.ViewModel.Title)
                 .BindTo(_titleLabel, x => x.Text)
                 .DisposeWith(Disposables);
@@ -54,5 +66,12 @@ namespace PlayGround.UI.iOS.Views
                     .Into(_imageView);
             }).DisposeWith(Disposables);
         }
+
+        public override void WillMoveToSuperview(UIView newsuper)
+        {
+            base.WillMoveToSuperview(newsuper);
+        }
+
+
     }
 }

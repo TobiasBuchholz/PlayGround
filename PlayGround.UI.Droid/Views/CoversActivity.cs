@@ -2,7 +2,6 @@
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Android.App;
-using Android.OS;
 using Android.Support.V7.Widget;
 using PlayGround.Contracts.ViewModels;
 using PlayGround.UI.Droid.Adapters;
@@ -15,30 +14,31 @@ namespace PlayGround.UI.Droid.Views
 	{
         private RecyclerView _recyclerView;
 
-		public CoversActivity()
+        public CoversActivity()
 		{
 		}
 
-        protected override void OnCreate(Bundle savedInstanceState)
-		{
-			base.OnCreate(savedInstanceState);
-			SetContentView(Resource.Layout.activity_covers);
-			InitRecyclerView();
-		}
-
-		private void InitRecyclerView()
-		{
+        protected override void InitViews(CompositeDisposable disposables)
+        {
             _recyclerView = FindViewById<RecyclerView>(Resource.Id.activity_covers_recycler_view);
             _recyclerView.SetLayoutManager(new GridLayoutManager(this, 2));
-		}
+        }
 
-        protected override void BindControls(CompositeDisposable disposables)
+        protected override void BindGlobalControlsOnBackgroundThread(CompositeDisposable disposables)
         {
             this.WhenAnyValue(x => x.ViewModel.CoverViewModels)
                 .WhereNotNull()
-                .Select(x => new CoversRecyclerAdapter(ViewModel.CoverViewModels))
+                .Select(CreateRecyclerAdapter)
+                .ObserveOn(RxApp.MainThreadScheduler)
                 .SubscribeSafe(x => _recyclerView.SetAdapter(x))
                 .DisposeWith(disposables);
         }
-	}
+
+        private CoversRecyclerAdapter CreateRecyclerAdapter(ReactiveList<ICoverViewModel> viewModels)
+        {
+            return new CoversRecyclerAdapter(viewModels);
+        }
+
+        protected override int LayoutResId => Resource.Layout.activity_covers;
+    }
 }

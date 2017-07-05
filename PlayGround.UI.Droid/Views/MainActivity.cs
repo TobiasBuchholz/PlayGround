@@ -1,4 +1,5 @@
-﻿using System.Reactive.Disposables;
+﻿using System;
+using System.Reactive.Disposables;
 using Android.App;
 using Android.Content;
 using Android.OS;
@@ -17,18 +18,11 @@ namespace PlayGround.UI.Droid
 	{
         private TextView _helloWorldLabel;
 
-		public MainActivity() 
+        public MainActivity() 
 		{
 		}
 
-        protected override void OnCreate(Bundle savedInstanceState)
-		{
-			base.OnCreate(savedInstanceState);
-			SetContentView(Resource.Layout.activity_main);
-			InitViews();
-		}
-
-		private void InitViews()
+        protected override void InitViews(CompositeDisposable disposables)
 		{
 			_helloWorldLabel = FindViewById<TextView>(Resource.Id.activity_main_hello_world_label);
 			_helloWorldLabel.Click += (sender, e) => StartActivity(new Intent(this, typeof(CoversActivity)));
@@ -41,11 +35,13 @@ namespace PlayGround.UI.Droid
                 .Into(imageView);
 		}
 
-        protected override void BindControls(CompositeDisposable disposables)
+        protected override void BindGlobalControlsOnMainThread(CompositeDisposable disposables)
         {
             this.OneWayBind(ViewModel, x => x.HelloWorldText, x => x._helloWorldLabel.Text)
                 .DisposeWith(disposables);
         }
-	}
+
+        protected override int LayoutResId => Resource.Layout.activity_main;
+    }
 }
 

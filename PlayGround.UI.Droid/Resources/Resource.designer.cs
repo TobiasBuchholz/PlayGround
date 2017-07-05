@@ -1713,11 +1713,32 @@ namespace PlayGround.UI.Droid
 			// aapt resource value: 0x7f06005b
 			public const int ImageView = 2131099739;
 			
+			// aapt resource value: 0x7f06005d
+			public const int PropertyLabel1 = 2131099741;
+			
+			// aapt resource value: 0x7f06005e
+			public const int PropertyLabel2 = 2131099742;
+			
+			// aapt resource value: 0x7f06005f
+			public const int PropertyLabel3 = 2131099743;
+			
+			// aapt resource value: 0x7f060060
+			public const int PropertyLabel4 = 2131099744;
+			
+			// aapt resource value: 0x7f060061
+			public const int PropertyLabel5 = 2131099745;
+			
+			// aapt resource value: 0x7f060062
+			public const int PropertyLabel6 = 2131099746;
+			
+			// aapt resource value: 0x7f060063
+			public const int PropertyLabel7 = 2131099747;
+			
 			// aapt resource value: 0x7f06005c
 			public const int TitleLabel = 2131099740;
 			
-			// aapt resource value: 0x7f060060
-			public const int action0 = 2131099744;
+			// aapt resource value: 0x7f060067
+			public const int action0 = 2131099751;
 			
 			// aapt resource value: 0x7f060048
 			public const int action_bar = 2131099720;
@@ -1740,17 +1761,17 @@ namespace PlayGround.UI.Droid
 			// aapt resource value: 0x7f060025
 			public const int action_bar_title = 2131099685;
 			
-			// aapt resource value: 0x7f06005d
-			public const int action_container = 2131099741;
+			// aapt resource value: 0x7f060064
+			public const int action_container = 2131099748;
 			
 			// aapt resource value: 0x7f060049
 			public const int action_context_bar = 2131099721;
 			
-			// aapt resource value: 0x7f060064
-			public const int action_divider = 2131099748;
+			// aapt resource value: 0x7f06006b
+			public const int action_divider = 2131099755;
 			
-			// aapt resource value: 0x7f06005e
-			public const int action_image = 2131099742;
+			// aapt resource value: 0x7f060065
+			public const int action_image = 2131099749;
 			
 			// aapt resource value: 0x7f060003
 			public const int action_menu_divider = 2131099651;
@@ -1767,11 +1788,11 @@ namespace PlayGround.UI.Droid
 			// aapt resource value: 0x7f060027
 			public const int action_mode_close_button = 2131099687;
 			
-			// aapt resource value: 0x7f06005f
-			public const int action_text = 2131099743;
+			// aapt resource value: 0x7f060066
+			public const int action_text = 2131099750;
 			
-			// aapt resource value: 0x7f06006d
-			public const int actions = 2131099757;
+			// aapt resource value: 0x7f060074
+			public const int actions = 2131099764;
 			
 			// aapt resource value: 0x7f060028
 			public const int activity_chooser_view_content = 2131099688;
@@ -1806,14 +1827,14 @@ namespace PlayGround.UI.Droid
 			// aapt resource value: 0x7f06002f
 			public const int buttonPanel = 2131099695;
 			
-			// aapt resource value: 0x7f060061
-			public const int cancel_action = 2131099745;
+			// aapt resource value: 0x7f060068
+			public const int cancel_action = 2131099752;
 			
 			// aapt resource value: 0x7f06003f
 			public const int checkbox = 2131099711;
 			
-			// aapt resource value: 0x7f060069
-			public const int chronometer = 2131099753;
+			// aapt resource value: 0x7f060070
+			public const int chronometer = 2131099760;
 			
 			// aapt resource value: 0x7f06001f
 			public const int collapseActionView = 2131099679;
@@ -1842,8 +1863,8 @@ namespace PlayGround.UI.Droid
 			// aapt resource value: 0x7f06001c
 			public const int end = 2131099676;
 			
-			// aapt resource value: 0x7f060073
-			public const int end_padder = 2131099763;
+			// aapt resource value: 0x7f06007a
+			public const int end_padder = 2131099770;
 			
 			// aapt resource value: 0x7f060029
 			public const int expand_activities_button = 2131099689;
@@ -1860,8 +1881,8 @@ namespace PlayGround.UI.Droid
 			// aapt resource value: 0x7f06002d
 			public const int icon = 2131099693;
 			
-			// aapt resource value: 0x7f06006e
-			public const int icon_group = 2131099758;
+			// aapt resource value: 0x7f060075
+			public const int icon_group = 2131099765;
 			
 			// aapt resource value: 0x7f060020
 			public const int ifRoom = 2131099680;
@@ -1869,17 +1890,17 @@ namespace PlayGround.UI.Droid
 			// aapt resource value: 0x7f06002a
 			public const int image = 2131099690;
 			
-			// aapt resource value: 0x7f06006a
-			public const int info = 2131099754;
+			// aapt resource value: 0x7f060071
+			public const int info = 2131099761;
 			
 			// aapt resource value: 0x7f060000
 			public const int item_touch_helper_previous_elevation = 2131099648;
 			
-			// aapt resource value: 0x7f06006f
-			public const int line1 = 2131099759;
+			// aapt resource value: 0x7f060076
+			public const int line1 = 2131099766;
 			
-			// aapt resource value: 0x7f060071
-			public const int line3 = 2131099761;
+			// aapt resource value: 0x7f060078
+			public const int line3 = 2131099768;
 			
 			// aapt resource value: 0x7f06000a
 			public const int listMode = 2131099658;
@@ -1887,8 +1908,8 @@ namespace PlayGround.UI.Droid
 			// aapt resource value: 0x7f06002c
 			public const int list_item = 2131099692;
 			
-			// aapt resource value: 0x7f060063
-			public const int media_actions = 2131099747;
+			// aapt resource value: 0x7f06006a
+			public const int media_actions = 2131099754;
 			
 			// aapt resource value: 0x7f06001d
 			public const int middle = 2131099677;
@@ -1905,14 +1926,14 @@ namespace PlayGround.UI.Droid
 			// aapt resource value: 0x7f06000b
 			public const int normal = 2131099659;
 			
+			// aapt resource value: 0x7f060073
+			public const int notification_background = 2131099763;
+			
+			// aapt resource value: 0x7f06006d
+			public const int notification_main_column = 2131099757;
+			
 			// aapt resource value: 0x7f06006c
-			public const int notification_background = 2131099756;
-			
-			// aapt resource value: 0x7f060066
-			public const int notification_main_column = 2131099750;
-			
-			// aapt resource value: 0x7f060065
-			public const int notification_main_column_container = 2131099749;
+			public const int notification_main_column_container = 2131099756;
 			
 			// aapt resource value: 0x7f060031
 			public const int parentPanel = 2131099697;
@@ -1926,11 +1947,11 @@ namespace PlayGround.UI.Droid
 			// aapt resource value: 0x7f060041
 			public const int radio = 2131099713;
 			
-			// aapt resource value: 0x7f06006b
-			public const int right_icon = 2131099755;
+			// aapt resource value: 0x7f060072
+			public const int right_icon = 2131099762;
 			
-			// aapt resource value: 0x7f060067
-			public const int right_side = 2131099751;
+			// aapt resource value: 0x7f06006e
+			public const int right_side = 2131099758;
 			
 			// aapt resource value: 0x7f060016
 			public const int screen = 2131099670;
@@ -2004,8 +2025,8 @@ namespace PlayGround.UI.Droid
 			// aapt resource value: 0x7f060019
 			public const int src_over = 2131099673;
 			
-			// aapt resource value: 0x7f060062
-			public const int status_bar_latest_event_content = 2131099746;
+			// aapt resource value: 0x7f060069
+			public const int status_bar_latest_event_content = 2131099753;
 			
 			// aapt resource value: 0x7f060042
 			public const int submenuarrow = 2131099714;
@@ -2016,11 +2037,11 @@ namespace PlayGround.UI.Droid
 			// aapt resource value: 0x7f06000c
 			public const int tabMode = 2131099660;
 			
-			// aapt resource value: 0x7f060072
-			public const int text = 2131099762;
+			// aapt resource value: 0x7f060079
+			public const int text = 2131099769;
 			
-			// aapt resource value: 0x7f060070
-			public const int text2 = 2131099760;
+			// aapt resource value: 0x7f060077
+			public const int text2 = 2131099767;
 			
 			// aapt resource value: 0x7f060036
 			public const int textSpacerNoButtons = 2131099702;
@@ -2028,8 +2049,8 @@ namespace PlayGround.UI.Droid
 			// aapt resource value: 0x7f060035
 			public const int textSpacerNoTitle = 2131099701;
 			
-			// aapt resource value: 0x7f060068
-			public const int time = 2131099752;
+			// aapt resource value: 0x7f06006f
+			public const int time = 2131099759;
 			
 			// aapt resource value: 0x7f06002e
 			public const int title = 2131099694;

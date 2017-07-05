@@ -1,73 +1,118 @@
 using System;
-using System.Reactive;
+using System.Collections.Generic;
+using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Threading.Tasks;
 using ReactiveUI;
 using Splat;
+using UIKit;
 
 namespace PlayGround.UI.iOS.Utility
 {
-	public abstract class ViewControllerBase<TViewModel> : ReactiveViewController, IViewFor<TViewModel>
+    public abstract class ViewControllerBase<TViewModel> : ReactiveViewController<TViewModel>, ICanDisposeGlobals
         where TViewModel : class, IDisposable
     {
-        private TViewModel _viewModel;
         private CompositeDisposable _disposables;
         private ISubject<CompositeDisposable> _activated;
+        private bool _autoCreateViewModel;
 
-		protected ViewControllerBase(IntPtr handle) 
-			: base(handle)
-		{
-            Initialize();
-		}
-
-        protected ViewControllerBase()
+        #region constructors
+        protected ViewControllerBase(IntPtr handle, bool autoCreateViewModel = true) 
+            : base(handle)
         {
-            Initialize();
+            _autoCreateViewModel = autoCreateViewModel;
+            InitializeFields();
         }
 
-        private void Initialize()
+        private void InitializeFields()
         {
             _disposables = new CompositeDisposable();
             _activated = new Subject<CompositeDisposable>();
+        }
+
+        protected ViewControllerBase(bool autoCreateViewModel = true)
+        {
+            _autoCreateViewModel = autoCreateViewModel;
+            InitializeFields();
+        }
+        #endregion
+
+        public override void LoadView()
+        {
+            base.LoadView();
+            InitViews(_disposables);
+            InitViewModel();
+        }
+
+        protected abstract void InitViews(CompositeDisposable disposables);
+
+        private void InitViewModel()
+        {
             this.WhenActivated(_activated.OnNext);
 
             _activated
-                .CombineLatest(CreateViewModelDeferred(), (disposables,_) => disposables)
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Do(x => BindControls(x))
+                .CombineLatest(GetInitializedViewModel(), (disposables,_) => disposables)
+                .Do(x => RxApp.MainThreadScheduler.Schedule(() => BindLifecycleControlsOnMainThread(x)))
+                .Do(x => RxApp.TaskpoolScheduler.Schedule(() => BindLifecycleControlsOnBackgroundThread(x)))
                 .SubscribeSafe()
                 .DisposeWith(_disposables);
+
+            if(_autoCreateViewModel) {
+                Task.Run(() => ViewModel = CreateViewModel());
+            }  
         }
 
-        private IObservable<Unit> CreateViewModelDeferred()
+        private IObservable<TViewModel> GetInitializedViewModel()
         {
-            return Observable
-                .Defer(() => { ViewModel = CreateViewModel(); return Observables.Unit; })
-                .SubscribeOn(RxApp.TaskpoolScheduler);
+            return this
+                .WhenAnyValue(x => x.ViewModel)
+                .WhereNotNull()
+                .Do(_ => RxApp.MainThreadScheduler.Schedule(() => BindGlobalControlsOnMainThread(_disposables)))
+                .Do(_ => RxApp.TaskpoolScheduler.Schedule(() => BindGlobalControlsOnBackgroundThread(_disposables)));
+        }
+
+        protected virtual void BindGlobalControlsOnMainThread(CompositeDisposable disposables)
+        {
+            // override if needed
+        }
+
+        protected virtual void BindGlobalControlsOnBackgroundThread(CompositeDisposable disposables)
+        {
+            // override if needed
+        }
+
+        protected virtual void BindLifecycleControlsOnMainThread(CompositeDisposable disposables)
+        {
+            // override if needed
+        }
+
+        protected virtual void BindLifecycleControlsOnBackgroundThread(CompositeDisposable disposables) 
+        {
+            // override if needed
         }
 
         protected virtual TViewModel CreateViewModel() => Locator.Current.GetService<TViewModel>();
-        protected abstract void BindControls(CompositeDisposable disposables);
-        protected CompositeDisposable Disposables => _disposables;
 
-        public TViewModel ViewModel
+        public override void WillMoveToParentViewController(UIViewController parent)
         {
-            get { return _viewModel; }
-            set { this.RaiseAndSetIfChanged(ref _viewModel, value); }
+            base.WillMoveToParentViewController(parent);
+            if(parent == null && ViewModel != null) {
+                RxApp.MainThreadScheduler.Schedule(() => DisposeGlobalsOnMainThread());
+                RxApp.TaskpoolScheduler.Schedule(() => DisposeGlobalsOnBackgroundThread());
+            }
         }
 
-        object IViewFor.ViewModel
+        public virtual void DisposeGlobalsOnMainThread()
         {
-            get { return ViewModel; }
-            set { ViewModel = (TViewModel)value; }
+            View.Subviews.DisposeGlobals();
         }
 
-        protected override void Dispose(bool disposing)
+        public virtual void DisposeGlobalsOnBackgroundThread()
         {
-            base.Dispose(disposing);
-            _disposables.Dispose();
-            ViewModel.Dispose();
+            _disposables?.Dispose();
+            ViewModel?.Dispose();            
         }
     }
 }

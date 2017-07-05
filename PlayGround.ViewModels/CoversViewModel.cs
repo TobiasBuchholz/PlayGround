@@ -39,10 +39,10 @@ namespace PlayGround.ViewModels
 	            })
                 .DisposeWith(lifeCycleDisposable);
 
-            _coversRepository
-                .UpdateCovers()
-                .SubscribeSafe()
-                .DisposeWith(lifeCycleDisposable);
+            //_coversRepository
+                //.UpdateCovers()
+                //.SubscribeSafe()
+                //.DisposeWith(lifeCycleDisposable);
         }
 
         public ReactiveList<ICoverViewModel> CoverViewModels => _coversViewModels;

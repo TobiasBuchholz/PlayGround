@@ -19,25 +19,23 @@ namespace PlayGround.UI.iOS
         {
         }
 
-		public override void LoadView()
-		{
-			base.LoadView();
-
+        protected override void InitViews(CompositeDisposable disposables)
+        {
 			var bottomLabel = ControlFactory
 				.CreateLabel()
-				.DisposeWith(Disposables);
+				.DisposeWith(disposables);
 			bottomLabel.Text = "Text at bottom";
 			bottomLabel.TextAlignment = UITextAlignment.Left;
 
 			var aboveBottomLabel = ControlFactory
 				.CreateLabel()
-				.DisposeWith(Disposables);
+				.DisposeWith(disposables);
 			aboveBottomLabel.Text = "Text above bottom label";
 			aboveBottomLabel.TextAlignment = UITextAlignment.Left;
 
 			var imageView = ControlFactory
 				.CreateImage()
-				.DisposeWith(Disposables);
+				.DisposeWith(disposables);
             imageView.ContentMode = UIViewContentMode.ScaleAspectFill;
 
             ImageService
@@ -66,28 +64,19 @@ namespace PlayGround.UI.iOS
 				imageView.Bottom() == aboveBottomLabel.Top());
 
             View.AddSubviews(imageView, bottomLabel, aboveBottomLabel, iconView);
+
+            View.BringSubviewToFront(HelloWorldLabel);
+            HelloWorldLabel.UserInteractionEnabled = true;
+            HelloWorldLabel.AddGestureRecognizer(new UITapGestureRecognizer(() => {
+                var view = new CoversViewController();
+                PresentViewController(view, true, null);
+            }));
 		}
 
-        protected override void BindControls(CompositeDisposable disposables)
+        protected override void BindGlobalControlsOnMainThread(CompositeDisposable disposables)
         {
             this.OneWayBind(ViewModel, x => x.HelloWorldText, x => x.HelloWorldLabel.Text)
                .DisposeWith(disposables);
         }
-
-		public override void ViewDidLoad()
-		{
-			base.ViewDidLoad();
-			InitViews();
-		}
-
-        private void InitViews()
-		{
-			View.BringSubviewToFront(HelloWorldLabel);
-			HelloWorldLabel.UserInteractionEnabled = true;
-			HelloWorldLabel.AddGestureRecognizer(new UITapGestureRecognizer(() => {
-				var view = new CoversViewController();
-				PresentViewController(view, true, null);
-			}));
-		}
     }
 }

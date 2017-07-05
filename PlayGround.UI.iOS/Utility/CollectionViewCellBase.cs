@@ -4,11 +4,10 @@ using ReactiveUI;
 
 namespace PlayGround.UI.iOS.Utility
 {
-    public abstract class CollectionViewCellBase<T> : ReactiveCollectionViewCell, IViewFor<T>
+    public abstract class CollectionViewCellBase<T> : ReactiveCollectionViewCell<T>
         where T : class
     {
         private readonly CompositeDisposable disposables;
-        private T viewModel;
         private bool didSetupConstraints;
 
         protected CollectionViewCellBase(IntPtr handle)
@@ -18,18 +17,6 @@ namespace PlayGround.UI.iOS.Utility
             this.CreateView();
             this.CreateBindings();
             this.UpdateConstraints();
-        }
-
-        public T ViewModel
-        {
-            get { return this.viewModel; }
-            set { this.RaiseAndSetIfChanged(ref this.viewModel, value); }
-        }
-
-        object IViewFor.ViewModel
-        {
-            get { return this.ViewModel; }
-            set { this.ViewModel = (T)value; }
         }
 
         protected CompositeDisposable Disposables => this.disposables;

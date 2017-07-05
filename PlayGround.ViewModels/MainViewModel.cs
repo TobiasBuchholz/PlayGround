@@ -13,7 +13,7 @@ namespace PlayGround.ViewModels
 	{
         private readonly IHelloWorldService _helloWorldService;
 
-        private ObservableAsPropertyHelper<string> _helloWorldText;
+        private string _helloWorldText;
         private ReactiveCommandBase<Unit, HelloWorldModel> _loadHelloWorld;
 
 		public MainViewModel(IHelloWorldService helloWorldService)
@@ -35,10 +35,13 @@ namespace PlayGround.ViewModels
         {
             this.WhenAnyObservable(x => x._loadHelloWorld)
                 .Select(x => x.Name)
-                .ToProperty(this, x => x.HelloWorldText, out _helloWorldText)
+                .BindTo(this, x => x.HelloWorldText)
                 .DisposeWith(lifeCycleDisposable);
         }
 
-        public string HelloWorldText => _helloWorldText.Value;
+        public string HelloWorldText {
+            get => _helloWorldText;
+            private set => this.RaiseAndSetIfChanged(ref _helloWorldText, value);
+        }
 	}
 }
