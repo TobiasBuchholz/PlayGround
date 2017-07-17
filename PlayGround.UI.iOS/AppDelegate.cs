@@ -18,15 +18,15 @@ namespace PlayGround.UI.iOS
 
 		public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
 		{
-			this.InitializeCompositionRoot();
-			this.InitializeControlFactory();
+            this.InitializeCompositionRoot();
+            this.InitializeControlFactory();
 
-			new SplatRegistrar().Register(Locator.CurrentMutable, new iOSCompositionRoot());
+            new SplatRegistrar().Register(Locator.CurrentMutable, compositionRoot);
 			return true;
 		}
 
-		private void InitializeCompositionRoot() =>
-			this.compositionRoot = new iOSCompositionRoot();
+        private void InitializeCompositionRoot() =>
+            this.compositionRoot = new iOSCompositionRoot(Window.RootViewController as UINavigationController);
 
 		private void InitializeControlFactory() =>
 			ControlFactory.Initialize(compositionRoot.ResolveSystemNotificationsService());

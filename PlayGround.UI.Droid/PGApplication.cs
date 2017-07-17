@@ -2,15 +2,17 @@
 using System.Diagnostics;
 using System.Globalization;
 using Android.App;
+using Android.OS;
 using Android.Runtime;
 using Android.Util;
 using Genesis.Logging;
+using Plugin.CurrentActivity;
 using Splat;
 
 namespace PlayGround.UI.Droid
 {
 	[Application]
-	public class PGApplication : Application
+    public class PGApplication : Application, Application.IActivityLifecycleCallbacks
 	{
 		public PGApplication(IntPtr handle, JniHandleOwnership transfer)
 			: base(handle,transfer)
@@ -20,6 +22,8 @@ namespace PlayGround.UI.Droid
 		public override void OnCreate()
 		{
 			base.OnCreate();
+            RegisterActivityLifecycleCallbacks(this);
+
             ConfigureAmbientLoggerService();
             DirectLoggingOutputToConsole();
 
@@ -70,5 +74,42 @@ namespace PlayGround.UI.Droid
             }
             return s.Substring(s.Length - characters - 1);
         }
-	}
+
+        public override void OnTerminate()
+        {
+            base.OnTerminate();
+            UnregisterActivityLifecycleCallbacks(this);
+        }
+
+        public void OnActivityCreated(Activity activity, Bundle savedInstanceState)
+        {
+            CrossCurrentActivity.Current.Activity = activity;
+        }
+
+        public void OnActivityDestroyed(Activity activity)
+        {
+        }
+
+        public void OnActivityPaused(Activity activity)
+        {
+        }
+
+        public void OnActivityResumed(Activity activity)
+        {
+            CrossCurrentActivity.Current.Activity = activity;
+        }
+
+        public void OnActivitySaveInstanceState(Activity activity, Bundle outState)
+        {
+        }
+
+        public void OnActivityStarted(Activity activity)
+        {
+            CrossCurrentActivity.Current.Activity = activity;
+        }
+
+        public void OnActivityStopped(Activity activity)
+        {
+        }
+    }
 }

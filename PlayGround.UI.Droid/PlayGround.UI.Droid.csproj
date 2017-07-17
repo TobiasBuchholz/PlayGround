@@ -156,6 +156,9 @@
     <Reference Include="Genesis.Observables">
       <HintPath>..\packages\Genesis.Observables.1.0.1-alpha\lib\portable-net45+win8+wp8+wpa81\Genesis.Observables.dll</HintPath>
     </Reference>
+    <Reference Include="Plugin.CurrentActivity">
+      <HintPath>..\packages\Plugin.CurrentActivity.1.0.1\lib\MonoAndroid10\Plugin.CurrentActivity.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Resources\Resource.designer.cs" />
@@ -167,6 +170,7 @@
     <Compile Include="Views\CoversActivity.cs" />
     <Compile Include="Adapters\CoversRecyclerAdapter.cs" />
     <Compile Include="Controls\IconView.cs" />
+    <Compile Include="Services\NavigationService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -200,6 +204,7 @@
     <Folder Include="Adapters\" />
     <Folder Include="Controls\" />
     <Folder Include="Resources\color\" />
+    <Folder Include="Services\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PlayGround.Contracts\PlayGround.Contracts.csproj">

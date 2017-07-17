@@ -44,15 +44,6 @@ namespace PlayGround.UI.iOS.Views
         {
             System.Diagnostics.Debug.WriteLine("Create Bindings " + ViewModel);
 
-            this.WhenActivated(disposables => 
-            {
-                this.WhenAnyObservable(x => x.ViewModel.TestCounter)
-                .Where(_ => ViewModel.Title.Equals("Design Patterns CD"))
-                .Debug(x => $"{ViewModel.Title} -> counter: {x}")
-                .SubscribeSafe()
-                .DisposeWith(disposables);                
-            });
-
             this.WhenAnyValue(x => x.ViewModel.Title)
                 .BindTo(_titleLabel, x => x.Text)
                 .DisposeWith(Disposables);

@@ -68,8 +68,7 @@ namespace PlayGround.UI.iOS
             View.BringSubviewToFront(HelloWorldLabel);
             HelloWorldLabel.UserInteractionEnabled = true;
             HelloWorldLabel.AddGestureRecognizer(new UITapGestureRecognizer(() => {
-                var view = new CoversViewController();
-                PresentViewController(view, true, null);
+                NavigationController.PushViewController(new CoversViewController(), true);
             }));
 		}
 

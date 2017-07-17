@@ -4,6 +4,7 @@ using System.Threading;
 using Genesis.Logging;
 using PlayGround.Contracts.Repositories;
 using PlayGround.Contracts.Services.HelloWorld;
+using PlayGround.Contracts.Services.Navigation;
 using PlayGround.Contracts.Services.ServerApi;
 using PlayGround.Contracts.Services.SystemNotifications;
 using PlayGround.Contracts.ViewModels;
@@ -22,6 +23,7 @@ namespace PlayGround.UI
 		protected readonly Lazy<ISystemNotificationsService> systemNotificationsService;
 		protected readonly Lazy<IApiServiceFactory> apiServiceFactory;
 		protected readonly Lazy<ICoversRepository> coversRepository;
+        protected readonly Lazy<INavigationService> navigationService;
 		protected readonly Lazy<IHelloWorldService> helloWorldService;
 
 		private readonly ILogger logger;
@@ -34,7 +36,8 @@ namespace PlayGround.UI
 			systemNotificationsService = new Lazy<ISystemNotificationsService>(this.CreateSystemNotificationsService);
 			apiServiceFactory = new Lazy<IApiServiceFactory>(CreateApiServiceFactory);
 			coversRepository = new Lazy<ICoversRepository>(CreateCoversRepository);
-			helloWorldService = new Lazy<IHelloWorldService>(CreateHelloWorldService);
+			navigationService = new Lazy<INavigationService>(CreateNavigationService);
+            helloWorldService = new Lazy<IHelloWorldService>(CreateHelloWorldService);
 		}
 
 		private IScheduler CreateBackgroundScheduler() =>
@@ -60,12 +63,16 @@ namespace PlayGround.UI
 			                   apiServiceFactory.Value));
 
 		protected abstract ISystemNotificationsService CreateSystemNotificationsService();
+        protected abstract INavigationService CreateNavigationService();
 
 		private IHelloWorldService CreateHelloWorldService() =>
 			LoggedCreation(() => new HelloWorldService());
 
 		public IMainViewModel ResolveMainViewModel() => 
-			LoggedCreation(() => new MainViewModel(helloWorldService.Value));
+			LoggedCreation(() => 
+                           new MainViewModel(
+                               helloWorldService.Value,
+                               navigationService.Value));
 
 		public ICoversViewModel ResolveCoversViewModel() =>
 			LoggedCreation(() => 
@@ -88,6 +95,9 @@ namespace PlayGround.UI
 
 		public ICoversRepository ResolveCoversRepository() => 
 			coversRepository.Value;
+
+        public INavigationService ResolveNavigationService() =>
+            navigationService.Value;
 
 		public IHelloWorldService ResolveHelloWorldService() =>
 			helloWorldService.Value;
