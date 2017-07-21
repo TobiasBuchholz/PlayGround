@@ -9,6 +9,8 @@ using FFImageLoading.Svg.Platform;
 using FFImageLoading.Views;
 using PlayGround.Contracts.ViewModels;
 using PlayGround.UI.Droid.Views;
+using Plugin.InAppBilling;
+using Plugin.InAppBilling.Abstractions;
 using ReactiveUI;
 
 namespace PlayGround.UI.Droid
@@ -21,6 +23,19 @@ namespace PlayGround.UI.Droid
         public MainActivity() 
 		{
 		}
+
+        protected async override void OnCreate(Bundle savedInstanceState)
+        {
+            base.OnCreate(savedInstanceState);
+
+            var productIds = new string []{ "managed_test_01" };
+
+            var billing = CrossInAppBilling.Current;
+            var connected = await billing.ConnectAsync();
+            var items = await billing.GetProductInfoAsync(ItemType.InAppPurchase, productIds);
+
+            System.Diagnostics.Debug.WriteLine("items " + items);
+        }
 
         protected override void InitViews(CompositeDisposable disposables)
 		{
@@ -39,6 +54,12 @@ namespace PlayGround.UI.Droid
         {
             this.OneWayBind(ViewModel, x => x.HelloWorldText, x => x._helloWorldLabel.Text)
                 .DisposeWith(disposables);
+        }
+
+        protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
+        {
+            base.OnActivityResult(requestCode, resultCode, data);
+            InAppBillingImplementation.HandleActivityResult(requestCode, resultCode, data);
         }
 
         protected override int LayoutResId => Resource.Layout.activity_main;
