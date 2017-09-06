@@ -44,7 +44,7 @@
     <Reference Include="System.Core" />
     <Reference Include="Mono.Android" />
     <Reference Include="AmazonIapV2Android">
-      <HintPath>..\packages\AmazonIapV2-1.1\lib\android\AmazonIapV2Android.dll</HintPath>
+      <HintPath>..\AmazonIapV2-1.1\lib\android\AmazonIapV2Android.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
