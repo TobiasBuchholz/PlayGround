@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using com.amazon.device.iap.cpt;
@@ -36,6 +35,9 @@ namespace PlayGround.UI.Droid.Services
         }
 
         /*
+         * Using await Task.Delay(TimeSpan.FromMilliseconds(1)); like below
+         * seems to solve the problem but it's way to hacky for my taste
+         * 
         public async Task<bool> GetProductInfoAsync(params string[] productIds)
         {
             await Task.Delay(TimeSpan.FromMilliseconds(1));
