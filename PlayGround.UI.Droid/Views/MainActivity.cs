@@ -13,16 +13,16 @@ namespace PlayGround.UI.Droid
 		{
 			base.OnCreate(savedInstanceState);
 			SetContentView(Resource.Layout.activity_main);
-            		TestBillingStuffAsync();
+            TestBillingStuffAsync();
 		}
 
-        private async Task TestBillingStuffAsync()
-        {
-            var service = new AmazonIAPService();
-            bool didWork1 = await service.GetProductInfoAsync("some.product.id");
-            bool didWork2 = await service.GetProductInfoAsync("some.product.id");
-            System.Diagnostics.Debug.WriteLine($"did work: {didWork1 && didWork2}");
-        }
-    }
+		private async Task TestBillingStuffAsync()
+		{
+		    var service = new AmazonIAPService();
+		    bool didWork1 = await service.GetProductInfoAsync("some.product.id");
+		    bool didWork2 = await service.GetProductInfoAsync("some.product.id");
+		    System.Diagnostics.Debug.WriteLine($"did work: {didWork1 && didWork2}");
+		}
+	}
 }
 
